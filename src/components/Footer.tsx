@@ -12,6 +12,7 @@ export function Footer({ navigate }: { navigate: (to: Route) => void }) {
     { to: '/pricing', label: t.nav.pricing },
     { to: '/case-studies', label: t.nav.caseStudies },
     { to: '/about', label: t.nav.about },
+    { to: '/articles', label: t.nav.articles },
     { to: '/contact', label: t.nav.contact },
   ];
 

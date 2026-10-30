@@ -19,6 +19,7 @@ export function Header({
     { to: '/network', label: t.nav.network },
     { to: '/pricing', label: t.nav.pricing },
     { to: '/case-studies', label: t.nav.caseStudies },
+    { to: '/articles', label: t.nav.articles },
     { to: '/about', label: t.nav.about },
   ];
 
