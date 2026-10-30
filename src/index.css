@@ -1,3 +1,13 @@
+/* Self-hosted fonts via @fontsource (must precede @tailwind) */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/vazirmatn/400.css';
+@import '@fontsource/vazirmatn/500.css';
+@import '@fontsource/vazirmatn/600.css';
+@import '@fontsource/vazirmatn/700.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,15 +31,31 @@ body {
   @apply bg-cream text-ink font-sans antialiased;
 }
 
+/* Default font: Vazirmatn for Persian (RTL), Inter for English (LTR) */
 html[dir='rtl'] body {
   font-family: 'Vazirmatn', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.8;
+}
+
+html[dir='ltr'] body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.6;
 }
 
 html[dir='rtl'] h1,
 html[dir='rtl'] h2,
 html[dir='rtl'] h3,
 html[dir='rtl'] h4 {
-  font-family: 'Vazirmatn', 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Vazirmatn', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.4;
+}
+
+html[dir='ltr'] h1,
+html[dir='ltr'] h2,
+html[dir='ltr'] h3,
+html[dir='ltr'] h4 {
+  font-family: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.2;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -99,4 +125,13 @@ select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Language cross-fade */
+.lang-fade {
+  animation: lang-fade 0.3s ease-out;
+}
+@keyframes lang-fade {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
 }

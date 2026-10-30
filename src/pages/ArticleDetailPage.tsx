@@ -24,7 +24,7 @@ export function ArticleDetailPage({
   const article = getArticleBySlug(slug);
 
   useSeo({
-    title: article ? `${article.title[locale]} — Arshnet` : 'Article — Arshnet',
+    title: article ? `${article.title[locale]} — Arshnet` : `${a.articleFallbackTitle} — Arshnet`,
     description: article ? article.excerpt[locale] : a.metaDesc,
     path: `/articles/${slug}`,
   });
@@ -33,8 +33,8 @@ export function ArticleDetailPage({
     return (
       <section className="bg-cream py-24">
         <div className="mx-auto max-w-2xl px-4 text-center sm:px-6">
-          <h1 className="text-3xl font-700 text-ink">404</h1>
-          <p className="mt-3 text-ink-500">Article not found.</p>
+          <h1 className="text-3xl font-700 text-ink">{a.notFoundCode}</h1>
+          <p className="mt-3 text-ink-500">{a.notFoundText}</p>
           <button
             onClick={() => navigate('/articles')}
             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-emerald px-5 py-3 text-base font-600 text-cream-50"

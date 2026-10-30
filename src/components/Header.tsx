@@ -38,7 +38,7 @@ export function Header({
         <motion.button
           onClick={() => go('/')}
           className="flex items-center gap-2.5"
-          aria-label="Arshnet home"
+          aria-label={t.common.homeLabel}
           initial={reduced ? undefined : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, ease: EASE }}
@@ -76,7 +76,7 @@ export function Header({
           <button
             onClick={toggle}
             className="inline-flex h-11 items-center gap-1.5 rounded-lg border border-hairline px-3 text-sm font-600 text-ink-500 transition-colors hover:bg-emerald/5"
-            aria-label="Switch language"
+            aria-label={t.common.switchLanguage}
           >
             <Globe className="h-4 w-4" />
             {locale === 'en' ? 'فا' : 'EN'}
@@ -92,7 +92,7 @@ export function Header({
           <button
             onClick={() => setOpen((v) => !v)}
             className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-ink-500 hover:bg-emerald/5 lg:hidden"
-            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-label={open ? t.common.closeMenu : t.common.openMenu}
             aria-expanded={open}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

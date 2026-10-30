@@ -25,6 +25,10 @@ export const fa: Translations = {
     send: 'ارسال',
     choose: 'انتخاب',
     mostPopular: 'محبوب‌ترین',
+    switchLanguage: 'تغییر زبان',
+    openMenu: 'باز کردن منو',
+    closeMenu: 'بستن منو',
+    homeLabel: 'صفحه اصلی عرش نت',
   },
   home: {
     badge: 'خدمات حضوری در [شهر / منطقه] و پشتیبانی از راه دور',
@@ -349,6 +353,9 @@ export const fa: Translations = {
     shareArticle: 'این مقاله را به اشتراک بگذارید',
     relatedTitle: 'ادامه مطالعه',
     allCategories: 'همه',
+    notFoundCode: '۴۰۴',
+    notFoundText: 'مقاله پیدا نشد.',
+    articleFallbackTitle: 'مقاله',
   },
   projectPlanner: {
     eyebrow: 'برنامه‌ریز پروژه',

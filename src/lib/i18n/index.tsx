@@ -84,7 +84,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     [locale, setLocale, toggle, digits],
   );
 
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+  return (
+    <I18nContext.Provider value={value}>
+      <div key={locale} className="lang-fade">
+        {children}
+      </div>
+    </I18nContext.Provider>
+  );
 }
 
 export function useI18n(): I18nContextType {

@@ -23,6 +23,10 @@ export const en = {
     send: 'Send',
     choose: 'Choose',
     mostPopular: 'Most popular',
+    switchLanguage: 'Switch language',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    homeLabel: 'Arshnet home',
   },
   home: {
     badge: 'Serving [CITY / REGION] on-site & remote',
@@ -348,6 +352,9 @@ export const en = {
     shareArticle: 'Share this article',
     relatedTitle: 'Keep reading',
     allCategories: 'All',
+    notFoundCode: '404',
+    notFoundText: 'Article not found.',
+    articleFallbackTitle: 'Article',
   },
   projectPlanner: {
     eyebrow: 'Project Planner',
