@@ -1,0 +1,278 @@
+import { useState } from 'react';
+import {
+  Phone,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Send,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+} from 'lucide-react';
+import type { Route } from '@/lib/router';
+import { useSeo } from '@/lib/seo';
+import { useReveal } from '@/lib/useReveal';
+import { useI18n } from '@/lib/i18n/index.tsx';
+import { supabase } from '@/lib/supabase';
+
+type Status = 'idle' | 'loading' | 'success' | 'error';
+type FormErrors = Partial<Record<'name' | 'phone' | 'email' | 'message', string>>;
+
+export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => void }) {
+  const { t } = useI18n();
+  const c = t.contact;
+
+  useSeo({ title: c.metaTitle, description: c.metaDesc, path: '/contact' });
+  useReveal();
+
+  const [values, setValues] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    service: c.services[0] as string,
+    message: '',
+  });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [status, setStatus] = useState<Status>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const validate = (v: typeof values): FormErrors => {
+    const e: FormErrors = {};
+    if (!v.name.trim()) e.name = c.errors.name;
+    if (!v.phone.trim()) {
+      e.phone = c.errors.phone;
+    } else if (!/^[+\d][\d\s()-]{5,}$/.test(v.phone.trim())) {
+      e.phone = c.errors.phoneInvalid;
+    }
+    if (!v.email.trim()) {
+      e.email = c.errors.email;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) {
+      e.email = c.errors.emailInvalid;
+    }
+    if (!v.message.trim()) {
+      e.message = c.errors.message;
+    } else if (v.message.trim().length < 10) {
+      e.message = c.errors.messageShort;
+    }
+    return e;
+  };
+
+  const update =
+    (field: keyof typeof values) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      setValues((v) => ({ ...v, [field]: e.target.value }));
+      if (errors[field as keyof FormErrors]) {
+        setErrors((prev) => ({ ...prev, [field]: undefined }));
+      }
+    };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const found = validate(values);
+    setErrors(found);
+    if (Object.keys(found).length > 0) return;
+
+    setStatus('loading');
+    setErrorMsg('');
+
+    if (!supabase) {
+      setStatus('error');
+      setErrorMsg(c.errorNotConnected);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from('contact_requests').insert({
+        name: values.name.trim(),
+        phone: values.phone.trim(),
+        email: values.email.trim(),
+        service: values.service,
+        message: values.message.trim(),
+      });
+      if (error) throw error;
+      setStatus('success');
+      setValues({ name: '', phone: '', email: '', service: c.services[0], message: '' });
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(
+        err instanceof Error
+          ? `${c.errorPrefix} ${err.message}. ${c.errorSuffix}`
+          : c.errorGeneric,
+      );
+    }
+  };
+
+  return (
+    <>
+      <section className="relative overflow-hidden bg-navy-900 pt-14 sm:pt-16">
+        <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
+        <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
+          <div className="reveal max-w-2xl">
+            <h1 className="text-3xl font-700 leading-[1.12] text-white sm:text-4xl lg:text-5xl">
+              {c.title}
+            </h1>
+            <p className="mt-4 text-lg text-slate-300">{c.subtitle}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-navy-900 py-12 sm:py-14">
+        <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+            {/* FORM */}
+            <div className="reveal rounded-2xl border border-white/10 bg-navy-800 p-6 sm:p-8">
+              {status === 'success' ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <CheckCircle2 className="h-14 w-14 text-accent-400" />
+                  <h2 className="mt-4 text-xl font-700 text-white">{c.successTitle}</h2>
+                  <p className="mt-2 max-w-sm text-slate-300">{c.successDesc}</p>
+                  <button
+                    onClick={() => setStatus('idle')}
+                    className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-600 text-white ring-1 ring-white/15 hover:bg-white/15"
+                  >
+                    {c.sendAnother}
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} noValidate>
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <Field label={c.nameLabel} error={errors.name} htmlFor="name">
+                      <input id="name" type="text" value={values.name} onChange={update('name')}
+                        className={inputClass(!!errors.name)} placeholder={c.namePlaceholder} autoComplete="name" />
+                    </Field>
+                    <Field label={c.phoneLabel} error={errors.phone} htmlFor="phone">
+                      <input id="phone" type="tel" value={values.phone} onChange={update('phone')}
+                        className={inputClass(!!errors.phone)} placeholder={c.phonePlaceholder} autoComplete="tel" />
+                    </Field>
+                    <Field label={c.emailLabel} error={errors.email} htmlFor="email">
+                      <input id="email" type="email" value={values.email} onChange={update('email')}
+                        className={inputClass(!!errors.email)} placeholder={c.emailPlaceholder} autoComplete="email" />
+                    </Field>
+                    <Field label={c.serviceLabel} htmlFor="service">
+                      <select id="service" value={values.service} onChange={update('service')} className={inputClass(false)}>
+                        {c.services.map((s) => (
+                          <option key={s} value={s} className="bg-navy-800">{s}</option>
+                        ))}
+                      </select>
+                    </Field>
+                  </div>
+                  <div className="mt-5">
+                    <Field label={c.messageLabel} error={errors.message} htmlFor="message">
+                      <textarea id="message" rows={5} value={values.message} onChange={update('message')}
+                        className={inputClass(!!errors.message)} placeholder={c.messagePlaceholder} />
+                    </Field>
+                  </div>
+
+                  {status === 'error' && (
+                    <div className="mt-5 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">
+                      <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+                      <span>{errorMsg}</span>
+                    </div>
+                  )}
+
+                  <button type="submit" disabled={status === 'loading'}
+                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-base font-600 text-white shadow-glow transition-transform hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-70">
+                    {status === 'loading' ? (
+                      <><Loader2 className="h-5 w-5 animate-spin" /> {c.sending}</>
+                    ) : (
+                      <><Send className="h-5 w-5" /> {c.sendButton}</>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
+
+            {/* CONTACT INFO */}
+            <div className="reveal space-y-4">
+              <a href={`tel:${t.common.phoneDial}`}
+                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-navy-800 p-5 transition-colors hover:border-accent/40">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
+                  <Phone className="h-6 w-6 text-accent-400" />
+                </div>
+                <div>
+                  <div className="text-sm text-slate-400">{c.callNow}</div>
+                  <div className="text-lg font-600 text-white">{t.common.phoneNumber}</div>
+                </div>
+              </a>
+
+              <a href="https://wa.me/[PHONE-DIGITS-NO-PLUS]" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-navy-800 p-5 transition-colors hover:border-accent/40">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
+                  <MessageCircle className="h-6 w-6 text-accent-400" />
+                </div>
+                <div>
+                  <div className="text-sm text-slate-400">{c.whatsapp}</div>
+                  <div className="text-lg font-600 text-white">{c.whatsappAction}</div>
+                </div>
+              </a>
+
+              <a href="https://t.me/[TELEGRAM-USERNAME]" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-navy-800 p-5 transition-colors hover:border-accent/40">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
+                  <Send className="h-6 w-6 text-accent-400" />
+                </div>
+                <div>
+                  <div className="text-sm text-slate-400">{c.telegram}</div>
+                  <div className="text-lg font-600 text-white">{c.telegramAction}</div>
+                </div>
+              </a>
+
+              <a href={`mailto:${t.common.contactEmail}`}
+                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-navy-800 p-5 transition-colors hover:border-accent/40">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
+                  <Mail className="h-6 w-6 text-accent-400" />
+                </div>
+                <div>
+                  <div className="text-sm text-slate-400">{c.emailAction}</div>
+                  <div className="text-lg font-600 text-white">{t.common.contactEmail}</div>
+                </div>
+              </a>
+
+              <div className="rounded-2xl border border-white/10 bg-navy-800 p-5">
+                <div className="flex items-center gap-2 text-slate-300">
+                  <MapPin className="h-5 w-5 text-accent-400" />
+                  <span className="font-600 text-white">{c.serviceArea}</span>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">{c.serviceAreaDesc}</p>
+                <div className="mt-3 flex items-center gap-2 text-slate-300">
+                  <Clock className="h-5 w-5 text-accent-400" />
+                  <span className="font-600 text-white">{c.hours}</span>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">{c.hoursDesc}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function inputClass(hasError: boolean) {
+  return `w-full rounded-xl border bg-navy-900 px-4 py-3 text-base text-white placeholder:text-slate-500 transition-colors focus:outline-none focus:ring-2 focus:ring-accent/60 ${
+    hasError ? 'border-red-500/60 focus:border-red-500' : 'border-white/10 focus:border-accent/50'
+  }`;
+}
+
+function Field({
+  label,
+  htmlFor,
+  error,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-600 text-slate-200">
+        {label}
+      </label>
+      {children}
+      {error && <p className="mt-1.5 text-sm text-red-300">{error}</p>}
+    </div>
+  );
+}
