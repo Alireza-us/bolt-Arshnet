@@ -1,5 +1,4 @@
 import { useRouter } from '@/lib/router';
-import { useDir } from '@/lib/useDir';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { MobileCallBar } from '@/components/MobileCallBar';
@@ -11,13 +10,18 @@ import { PricingPage } from '@/pages/PricingPage';
 import { CaseStudiesPage } from '@/pages/CaseStudiesPage';
 import { AboutPage } from '@/pages/AboutPage';
 import { ContactPage } from '@/pages/ContactPage';
+import { ArticlesPage } from '@/pages/ArticlesPage';
+import { ArticleDetailPage } from '@/pages/ArticleDetailPage';
+import { ScrollProgress } from '@/components/ScrollProgress';
+import { CursorGlow } from '@/components/CursorGlow';
 
 function App() {
   const { route, navigate } = useRouter();
-  useDir();
 
   return (
     <div className="flex min-h-screen flex-col bg-navy-900">
+      <ScrollProgress />
+      <CursorGlow />
       <Header route={route} navigate={navigate} />
       <main className="flex-1 pb-16 lg:pb-0">
         {route === '/' && <HomePage navigate={navigate} />}
@@ -28,6 +32,10 @@ function App() {
         {route === '/case-studies' && <CaseStudiesPage navigate={navigate} />}
         {route === '/about' && <AboutPage navigate={navigate} />}
         {route === '/contact' && <ContactPage navigate={navigate} />}
+        {route === '/articles' && <ArticlesPage navigate={navigate} />}
+        {route.startsWith('/articles/') && (
+          <ArticleDetailPage navigate={navigate} slug={route.replace('/articles/', '')} />
+        )}
       </main>
       <Footer navigate={navigate} />
       <MobileCallBar />

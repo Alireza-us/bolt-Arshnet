@@ -1,16 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 
-export type Route =
-  | '/'
-  | '/cameras'
-  | '/voip'
-  | '/network'
-  | '/pricing'
-  | '/case-studies'
-  | '/about'
-  | '/contact';
+export type Route = string;
 
-const ROUTES: Route[] = [
+export const ROUTE_PATTERNS = [
   '/',
   '/cameras',
   '/voip',
@@ -19,11 +11,13 @@ const ROUTES: Route[] = [
   '/case-studies',
   '/about',
   '/contact',
+  '/articles',
 ];
 
 function parse(hash: string): Route {
-  const clean = hash.replace(/^#/, '') as Route;
-  return ROUTES.includes(clean) ? clean : '/';
+  const clean = hash.replace(/^#/, '');
+  if (clean === '') return '/';
+  return clean;
 }
 
 export function useRouter() {
@@ -40,7 +34,7 @@ export function useRouter() {
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
-  const navigate = useCallback((to: Route) => {
+  const navigate = useCallback((to: string) => {
     window.location.hash = to;
   }, []);
 
