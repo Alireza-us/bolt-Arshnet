@@ -13,7 +13,7 @@ export function Faq({ items }: { items: FaqItem[] }) {
           <div key={i}>
             <button
               onClick={() => setOpen(isOpen ? null : i)}
-              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left min-h-[56px]"
+              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-start min-h-[56px]"
               aria-expanded={isOpen}
             >
               <span className="text-base font-600 text-ink">{item.q}</span>

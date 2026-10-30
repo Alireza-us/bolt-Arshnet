@@ -10,7 +10,7 @@ export function SectionHeading({
   eyebrow?: string;
   title: string;
   subtitle?: string;
-  align?: 'center' | 'left';
+      align?: 'center' | 'start';
 }) {
   const reduced = useReducedMotion();
   const variants = {
@@ -24,7 +24,7 @@ export function SectionHeading({
       viewport={{ once: true, margin: '-60px' }}
       variants={variants}
       transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
-      className={`max-w-2xl ${align === 'center' ? 'mx-auto text-center' : 'text-left'}`}
+      className={`max-w-2xl ${align === 'center' ? 'mx-auto text-center' : 'text-start'}`}
     >
       {eyebrow && (
         <div className="mb-3 text-xs font-600 uppercase tracking-[0.2em] text-champagne-600">

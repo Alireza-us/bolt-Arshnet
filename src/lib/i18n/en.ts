@@ -29,6 +29,8 @@ export const en = {
     homeLabel: 'Arshnet home',
   },
   home: {
+    metaTitle: 'Arshnet — CCTV, VoIP & Network Support for Small Business',
+    metaDesc: 'Freelance IT contractor for clinics, shops, offices and warehouses. CCTV & IP cameras, VoIP phone systems, and network & helpdesk support. Free consultation, clear pricing.',
     badge: 'Serving [CITY / REGION] on-site & remote',
     heroTitle: 'Reliable IT & security systems that keep your business running.',
     heroSubtitle:

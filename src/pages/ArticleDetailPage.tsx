@@ -181,7 +181,7 @@ export function ArticleDetailPage({
                   whileHover={reduced ? undefined : { y: -4 }}
                   transition={{ duration: 0.4, ease: EASE }}
                   onClick={() => navigate(`/articles/${rel.slug}`)}
-                  className="group flex flex-col rounded-2xl border border-hairline bg-cream-50 p-6 text-left shadow-card hover:border-emerald/30"
+                  className="group flex flex-col rounded-2xl border border-hairline bg-cream-50 p-6 text-start shadow-card hover:border-emerald/30"
                 >
                   <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">
                     <Tag className="h-3 w-3" />

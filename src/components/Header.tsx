@@ -65,7 +65,7 @@ export function Header({
               >
                 {l.label}
               </span>
-              <span className="absolute inset-x-2 -bottom-0.5 h-0.5 origin-left rounded-full bg-emerald transition-transform duration-300 ease-out group-hover:scale-x-100"
+              <span className="absolute inset-x-2 -bottom-0.5 h-0.5 origin-left rtl:origin-right rounded-full bg-emerald transition-transform duration-300 ease-out group-hover:scale-x-100"
                 style={{ transform: route === l.to ? 'scaleX(1)' : 'scaleX(0)' }}
               />
             </motion.button>

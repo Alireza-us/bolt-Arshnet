@@ -93,7 +93,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
       {/* COMPARISON TABLE */}
       <section className="bg-surface py-14 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading eyebrow={p.compareEyebrow} title={p.compareTitle} align="left" />
+          <SectionHeading eyebrow={p.compareEyebrow} title={p.compareTitle} align="start" />
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -102,7 +102,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
             transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
             className="mt-8 overflow-x-auto rounded-2xl border border-hairline bg-cream-50 shadow-card"
           >
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-start text-sm">
               <thead>
                 <tr className="border-b border-hairline bg-cream-200">
                   <th className="px-5 py-4 font-600 text-ink-600">{p.tableFeature}</th>
@@ -133,7 +133,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
             eyebrow={p.projectEyebrow}
             title={p.projectTitle}
             subtitle={p.projectSubtitle}
-            align="left"
+            align="start"
           />
           <motion.div
             variants={staggerContainer(0.08)}

@@ -11,7 +11,7 @@ const STAT_ICONS = [Clock, ShieldCheck, Award];
 const viewportOnce = { once: true, margin: '-60px' as const };
 
 export function AboutPage({ navigate }: { navigate: (to: Route) => void }) {
-  const { t, dir } = useI18n();
+  const { t, dir, locale } = useI18n();
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const a = t.about;
   const reduced = useReducedMotion();
@@ -33,7 +33,7 @@ export function AboutPage({ navigate }: { navigate: (to: Route) => void }) {
               <div className="aspect-[4/5] w-full rounded-2xl border border-hairline bg-surface bg-circuit flex items-center justify-center shadow-card">
                 <div className="text-center">
                   <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-emerald/8 text-4xl font-700 text-emerald">
-                    A
+                    {locale === 'fa' ? 'ع' : 'A'}
                   </div>
                   <p className="mt-4 text-sm text-ink-400">{a.photoPlaceholder}</p>
                 </div>

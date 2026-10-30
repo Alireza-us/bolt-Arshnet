@@ -35,7 +35,7 @@ const STEP_ICONS = [Phone, Cable, HardDriveDownload, Headphones];
 const viewportOnce = { once: true, margin: '-60px' as const };
 
 export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
-  const { t, dir } = useI18n();
+  const { t, dir, digits } = useI18n();
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const reduced = useReducedMotion();
   const heroRef = useRef<HTMLDivElement>(null);
@@ -48,9 +48,8 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
   const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, reduced ? 1 : 0.5]);
 
   useSeo({
-    title: 'Arshnet — CCTV, VoIP & Network Support for Small Business',
-    description:
-      'Freelance IT contractor for clinics, shops, offices and warehouses. CCTV & IP cameras, VoIP phone systems, and network & helpdesk support. Free consultation, clear pricing.',
+    title: t.home.metaTitle,
+    description: t.home.metaDesc,
     path: '/',
   });
 
@@ -136,7 +135,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
                   onClick={() => navigate(meta.to)}
                   whileHover={reduced ? undefined : { y: -6 }}
                   transition={{ duration: 0.4, ease: EASE }}
-                  className="group flex flex-col rounded-2xl border border-hairline bg-surface p-6 text-left shadow-card hover:border-emerald/30"
+                  className="group flex flex-col rounded-2xl border border-hairline bg-surface p-6 text-start shadow-card hover:border-emerald/30"
                 >
                   <div
                     className="flex h-14 w-14 items-center justify-center rounded-xl"
@@ -148,7 +147,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-500">
                     {s.short}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-600 text-emerald transition-transform group-hover:translate-x-1">
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-600 text-emerald transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1">
                     {t.common.learnMore} <BackIcon className="h-4 w-4" />
                   </span>
                 </motion.button>
@@ -184,8 +183,8 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
                   transition={{ duration: 0.4, ease: EASE }}
                   className="relative rounded-2xl border border-hairline bg-cream-50 p-6 shadow-card"
                 >
-                  <div className="absolute -top-3 left-6 flex h-7 w-7 items-center justify-center rounded-full bg-emerald text-sm font-700 text-cream-50">
-                    {i + 1}
+                  <div className="absolute -top-3 start-6 flex h-7 w-7 items-center justify-center rounded-full bg-emerald text-sm font-700 text-cream-50">
+                    {digits(String(i + 1))}
                   </div>
                   <StepIcon className="mt-3 h-8 w-8 text-emerald" />
                   <h3 className="mt-4 text-lg font-600 text-ink">{step.title}</h3>
