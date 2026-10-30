@@ -6,7 +6,7 @@ export type FaqItem = { q: string; a: string };
 export function Faq({ items }: { items: FaqItem[] }) {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <div className="mx-auto max-w-3xl divide-y divide-white/10 overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10">
+    <div className="mx-auto max-w-3xl divide-y divide-hairline overflow-hidden rounded-2xl bg-surface ring-1 ring-hairline shadow-card">
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
@@ -16,9 +16,9 @@ export function Faq({ items }: { items: FaqItem[] }) {
               className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left min-h-[56px]"
               aria-expanded={isOpen}
             >
-              <span className="text-base font-600 text-white">{item.q}</span>
+              <span className="text-base font-600 text-ink">{item.q}</span>
               <ChevronDown
-                className={`h-5 w-5 shrink-0 text-accent-400 transition-transform ${
+                className={`h-5 w-5 shrink-0 text-emerald transition-transform ${
                   isOpen ? 'rotate-180' : ''
                 }`}
               />
@@ -29,7 +29,7 @@ export function Faq({ items }: { items: FaqItem[] }) {
               }`}
             >
               <div className="overflow-hidden">
-                <p className="px-5 pb-5 text-sm leading-relaxed text-slate-400">
+                <p className="px-5 pb-5 text-sm leading-relaxed text-ink-500">
                   {item.a}
                 </p>
               </div>

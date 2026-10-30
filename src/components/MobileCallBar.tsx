@@ -7,7 +7,7 @@ export function MobileCallBar() {
     <div className="fixed inset-x-0 bottom-0 z-50 lg:hidden">
       <a
         href={`tel:${t.common.phoneDial}`}
-        className="flex items-center justify-center gap-2 bg-accent px-4 py-3.5 text-base font-600 text-white shadow-glow"
+        className="flex items-center justify-center gap-2 bg-emerald px-4 py-3.5 text-base font-600 text-cream-50 shadow-soft"
         dir={dir}
       >
         <Phone className="h-5 w-5" />

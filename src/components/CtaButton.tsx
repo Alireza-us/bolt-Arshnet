@@ -23,8 +23,8 @@ export function CtaButton({
     'inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-base font-600 transition-transform hover:scale-[1.03] active:scale-95 min-h-[44px]';
   const styles =
     variant === 'primary'
-      ? 'bg-accent text-white shadow-glow'
-      : 'bg-white/10 text-white ring-1 ring-white/15 hover:bg-white/15';
+      ? 'bg-emerald text-cream-50 shadow-soft'
+      : 'bg-surface text-emerald ring-1 ring-hairline hover:bg-emerald/5';
   return (
     <button
       onClick={() => navigate(to)}

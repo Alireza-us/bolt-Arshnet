@@ -8,20 +8,14 @@ type LogoProps = {
 
 export function Logo({ variant = 'mark', className = '', size = 36 }: LogoProps) {
   const { locale } = useI18n();
-  const id = 'logo-grad';
+  const markColor = '#1F3D36';
 
   const mark = (
     <svg viewBox="0 0 64 64" width={size} height={size} className="shrink-0" aria-hidden="true">
-      <defs>
-        <linearGradient id={id} x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0" stopColor="#2F6BFF" />
-          <stop offset="1" stopColor="#22D3EE" />
-        </linearGradient>
-      </defs>
       <path
         d="M9 56 L32 14 L55 56"
         fill="none"
-        stroke={`url(#${id})`}
+        stroke={markColor}
         strokeWidth="5.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -29,7 +23,7 @@ export function Logo({ variant = 'mark', className = '', size = 36 }: LogoProps)
       <path
         d="M20 42 H29 L33 36 L37 42 H44"
         fill="none"
-        stroke={`url(#${id})`}
+        stroke={markColor}
         strokeWidth="3.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -37,21 +31,21 @@ export function Logo({ variant = 'mark', className = '', size = 36 }: LogoProps)
       <path
         d="M22.5 9.5 A13 13 0 0 1 41.5 9.5"
         fill="none"
-        stroke={`url(#${id})`}
+        stroke={markColor}
         strokeWidth="3"
         strokeLinecap="round"
-        opacity="0.55"
+        opacity="0.4"
       />
       <path
         d="M26.5 14 A7 7 0 0 1 37.5 14"
         fill="none"
-        stroke={`url(#${id})`}
+        stroke="#C8A15A"
         strokeWidth="3"
         strokeLinecap="round"
-        opacity="0.85"
+        opacity="0.7"
       />
-      <circle cx="9" cy="56" r="4.5" fill="#2F6BFF" />
-      <circle cx="55" cy="56" r="4.5" fill="#22D3EE" />
+      <circle cx="9" cy="56" r="4.5" fill={markColor} />
+      <circle cx="55" cy="56" r="4.5" fill={markColor} />
     </svg>
   );
 
@@ -64,10 +58,10 @@ export function Logo({ variant = 'mark', className = '', size = 36 }: LogoProps)
       <div className={`flex items-center gap-2.5 ${className}`}>
         {mark}
         <span
-          className="font-display text-lg font-800 tracking-tight text-white"
+          className="font-display text-lg font-800 tracking-tight text-ink"
           style={{ fontFamily: "'Vazirmatn', sans-serif" }}
         >
-          عرش <span style={{ color: '#22D3EE' }}>نت</span>
+          عرش <span style={{ color: '#C8A15A' }}>نت</span>
         </span>
       </div>
     );
@@ -76,8 +70,8 @@ export function Logo({ variant = 'mark', className = '', size = 36 }: LogoProps)
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       {mark}
-      <span className="font-display text-lg font-700 tracking-tight text-white">
-        Arsh<span style={{ color: '#22D3EE' }}>net</span>
+      <span className="font-display text-lg font-700 tracking-tight text-ink">
+        Arsh<span style={{ color: '#C8A15A' }}>net</span>
       </span>
     </div>
   );

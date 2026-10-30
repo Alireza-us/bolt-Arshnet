@@ -71,7 +71,7 @@ export function NetworkGraph() {
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 130) {
             const alpha = (1 - dist / 130) * 0.3;
-            ctx.strokeStyle = `rgba(47, 107, 255, ${alpha})`;
+            ctx.strokeStyle = `rgba(31, 61, 54, ${alpha})`;
             ctx.lineWidth = 0.6;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
@@ -82,7 +82,7 @@ export function NetworkGraph() {
       }
 
       for (const n of nodes) {
-        ctx.fillStyle = 'rgba(47, 107, 255, 0.6)';
+        ctx.fillStyle = 'rgba(31, 61, 54, 0.5)';
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
         ctx.fill();

@@ -3,8 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --navy-900: #0B1220;
-  --accent: #2F6BFF;
+  --bg: #F6F4EF;
+  --surface: #FFFFFF;
+  --ink: #14141A;
+  --muted: #6B6B76;
+  --emerald: #1F3D36;
+  --champagne: #C8A15A;
+  --hairline: #E7E3DA;
+  --accent: #1F3D36;
 }
 
 html {
@@ -12,7 +18,7 @@ html {
 }
 
 body {
-  @apply bg-navy-900 text-slate-200 font-sans antialiased;
+  @apply bg-cream text-ink font-sans antialiased;
 }
 
 html[dir='rtl'] body {
@@ -40,19 +46,19 @@ html[dir='rtl'] h4 {
 }
 
 h1, h2, h3, h4 {
-  @apply font-display tracking-tight text-white;
+  @apply font-display tracking-tight text-ink;
 }
 
 ::selection {
-  background: rgba(47, 107, 255, 0.3);
-  color: #fff;
+  background: rgba(31, 61, 54, 0.15);
+  color: #14141A;
 }
 
-/* Circuit / grid background motif */
+/* Subtle grid background motif */
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(47, 107, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(47, 107, 255, 0.06) 1px, transparent 1px);
+    linear-gradient(to right, rgba(31, 61, 54, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(31, 61, 54, 0.05) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
@@ -62,7 +68,7 @@ h1, h2, h3, h4 {
 }
 
 .bg-circuit {
-  background-image: radial-gradient(circle at 1px 1px, rgba(47, 107, 255, 0.12) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(31, 61, 54, 0.10) 1px, transparent 0);
   background-size: 28px 28px;
 }
 

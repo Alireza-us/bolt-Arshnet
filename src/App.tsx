@@ -19,7 +19,7 @@ function App() {
   const { route, navigate } = useRouter();
 
   return (
-    <div className="flex min-h-screen flex-col bg-navy-900">
+    <div className="flex min-h-screen flex-col bg-cream">
       <ScrollProgress />
       <CursorGlow />
       <Header route={route} navigate={navigate} />

@@ -105,31 +105,31 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
 
   return (
     <>
-      <section className="relative overflow-hidden bg-navy-900 pt-14 sm:pt-16">
+      <section className="relative overflow-hidden bg-cream pt-14 sm:pt-16">
         <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
           <div className="reveal max-w-2xl">
-            <h1 className="text-3xl font-700 leading-[1.12] text-white sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
               {c.title}
             </h1>
-            <p className="mt-4 text-lg text-slate-300">{c.subtitle}</p>
+            <p className="mt-4 text-lg text-ink-500">{c.subtitle}</p>
           </div>
         </div>
       </section>
 
-      <section className="bg-navy-900 py-12 sm:py-14">
+      <section className="bg-cream py-12 sm:py-14">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
             {/* FORM */}
-            <div className="reveal rounded-2xl border border-white/10 bg-navy-800 p-6 sm:p-8">
+            <div className="reveal rounded-2xl border border-hairline bg-surface p-6 shadow-soft sm:p-8">
               {status === 'success' ? (
                 <div className="flex flex-col items-center justify-center py-10 text-center">
-                  <CheckCircle2 className="h-14 w-14 text-accent-400" />
-                  <h2 className="mt-4 text-xl font-700 text-white">{c.successTitle}</h2>
-                  <p className="mt-2 max-w-sm text-slate-300">{c.successDesc}</p>
+                  <CheckCircle2 className="h-14 w-14 text-emerald" />
+                  <h2 className="mt-4 text-xl font-700 text-ink">{c.successTitle}</h2>
+                  <p className="mt-2 max-w-sm text-ink-500">{c.successDesc}</p>
                   <button
                     onClick={() => setStatus('idle')}
-                    className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-white/10 px-5 py-3 text-sm font-600 text-white ring-1 ring-white/15 hover:bg-white/15"
+                    className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-cream px-5 py-3 text-sm font-600 text-emerald ring-1 ring-hairline hover:bg-emerald/5"
                   >
                     {c.sendAnother}
                   </button>
@@ -152,7 +152,7 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
                     <Field label={c.serviceLabel} htmlFor="service">
                       <select id="service" value={values.service} onChange={update('service')} className={inputClass(false)}>
                         {c.services.map((s) => (
-                          <option key={s} value={s} className="bg-navy-800">{s}</option>
+                          <option key={s} value={s} className="bg-surface">{s}</option>
                         ))}
                       </select>
                     </Field>
@@ -165,14 +165,14 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
                   </div>
 
                   {status === 'error' && (
-                    <div className="mt-5 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">
+                    <div className="mt-5 flex items-start gap-3 rounded-xl border border-red-400/30 bg-red-50 p-4 text-sm text-red-700">
                       <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
                       <span>{errorMsg}</span>
                     </div>
                   )}
 
                   <button type="submit" disabled={status === 'loading'}
-                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-base font-600 text-white shadow-glow transition-transform hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-70">
+                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-emerald px-6 py-3.5 text-base font-600 text-cream-50 shadow-soft transition-transform hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-70">
                     {status === 'loading' ? (
                       <><Loader2 className="h-5 w-5 animate-spin" /> {c.sending}</>
                     ) : (
@@ -186,60 +186,60 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
             {/* CONTACT INFO */}
             <div className="reveal space-y-4">
               <a href={`tel:${t.common.phoneDial}`}
-                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-navy-800 p-5 transition-colors hover:border-accent/40">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
-                  <Phone className="h-6 w-6 text-accent-400" />
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
+                  <Phone className="h-6 w-6 text-emerald" />
                 </div>
                 <div>
-                  <div className="text-sm text-slate-400">{c.callNow}</div>
-                  <div className="text-lg font-600 text-white">{t.common.phoneNumber}</div>
+                  <div className="text-sm text-ink-500">{c.callNow}</div>
+                  <div className="text-lg font-600 text-ink">{t.common.phoneNumber}</div>
                 </div>
               </a>
 
               <a href="https://wa.me/[PHONE-DIGITS-NO-PLUS]" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-navy-800 p-5 transition-colors hover:border-accent/40">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
-                  <MessageCircle className="h-6 w-6 text-accent-400" />
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
+                  <MessageCircle className="h-6 w-6 text-emerald" />
                 </div>
                 <div>
-                  <div className="text-sm text-slate-400">{c.whatsapp}</div>
-                  <div className="text-lg font-600 text-white">{c.whatsappAction}</div>
+                  <div className="text-sm text-ink-500">{c.whatsapp}</div>
+                  <div className="text-lg font-600 text-ink">{c.whatsappAction}</div>
                 </div>
               </a>
 
               <a href="https://t.me/[TELEGRAM-USERNAME]" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-navy-800 p-5 transition-colors hover:border-accent/40">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
-                  <Send className="h-6 w-6 text-accent-400" />
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
+                  <Send className="h-6 w-6 text-emerald" />
                 </div>
                 <div>
-                  <div className="text-sm text-slate-400">{c.telegram}</div>
-                  <div className="text-lg font-600 text-white">{c.telegramAction}</div>
+                  <div className="text-sm text-ink-500">{c.telegram}</div>
+                  <div className="text-lg font-600 text-ink">{c.telegramAction}</div>
                 </div>
               </a>
 
               <a href={`mailto:${t.common.contactEmail}`}
-                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-navy-800 p-5 transition-colors hover:border-accent/40">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
-                  <Mail className="h-6 w-6 text-accent-400" />
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
+                  <Mail className="h-6 w-6 text-emerald" />
                 </div>
                 <div>
-                  <div className="text-sm text-slate-400">{c.emailAction}</div>
-                  <div className="text-lg font-600 text-white">{t.common.contactEmail}</div>
+                  <div className="text-sm text-ink-500">{c.emailAction}</div>
+                  <div className="text-lg font-600 text-ink">{t.common.contactEmail}</div>
                 </div>
               </a>
 
-              <div className="rounded-2xl border border-white/10 bg-navy-800 p-5">
-                <div className="flex items-center gap-2 text-slate-300">
-                  <MapPin className="h-5 w-5 text-accent-400" />
-                  <span className="font-600 text-white">{c.serviceArea}</span>
+              <div className="rounded-2xl border border-hairline bg-surface p-5 shadow-card">
+                <div className="flex items-center gap-2 text-ink-600">
+                  <MapPin className="h-5 w-5 text-emerald" />
+                  <span className="font-600 text-ink">{c.serviceArea}</span>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{c.serviceAreaDesc}</p>
-                <div className="mt-3 flex items-center gap-2 text-slate-300">
-                  <Clock className="h-5 w-5 text-accent-400" />
-                  <span className="font-600 text-white">{c.hours}</span>
+                <p className="mt-2 text-sm leading-relaxed text-ink-500">{c.serviceAreaDesc}</p>
+                <div className="mt-3 flex items-center gap-2 text-ink-600">
+                  <Clock className="h-5 w-5 text-emerald" />
+                  <span className="font-600 text-ink">{c.hours}</span>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{c.hoursDesc}</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink-500">{c.hoursDesc}</p>
               </div>
             </div>
           </div>
@@ -250,8 +250,8 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
 }
 
 function inputClass(hasError: boolean) {
-  return `w-full rounded-xl border bg-navy-900 px-4 py-3 text-base text-white placeholder:text-slate-500 transition-colors focus:outline-none focus:ring-2 focus:ring-accent/60 ${
-    hasError ? 'border-red-500/60 focus:border-red-500' : 'border-white/10 focus:border-accent/50'
+  return `w-full rounded-xl border bg-cream-50 px-4 py-3 text-base text-ink placeholder:text-ink-400/60 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald/30 ${
+    hasError ? 'border-red-400 focus:border-red-400' : 'border-hairline focus:border-emerald/40'
   }`;
 }
 
@@ -268,11 +268,11 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-600 text-slate-200">
+      <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-600 text-ink-600">
         {label}
       </label>
       {children}
-      {error && <p className="mt-1.5 text-sm text-red-300">{error}</p>}
+      {error && <p className="mt-1.5 text-sm text-red-600">{error}</p>}
     </div>
   );
 }
