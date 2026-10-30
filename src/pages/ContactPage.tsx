@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Phone,
   Mail,
@@ -12,19 +13,20 @@ import {
 } from 'lucide-react';
 import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
-import { useReveal } from '@/lib/useReveal';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { supabase } from '@/lib/supabase';
+import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 type FormErrors = Partial<Record<'name' | 'phone' | 'email' | 'message', string>>;
+const viewportOnce = { once: true, margin: '-60px' as const };
 
 export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => void }) {
   const { t } = useI18n();
   const c = t.contact;
+  const reduced = useReducedMotion();
 
   useSeo({ title: c.metaTitle, description: c.metaDesc, path: '/contact' });
-  useReveal();
 
   const [values, setValues] = useState({
     name: '',
@@ -108,12 +110,17 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
       <section className="relative overflow-hidden bg-cream pt-14 sm:pt-16">
         <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
-          <div className="reveal max-w-2xl">
-            <h1 className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
+          <motion.div
+            variants={staggerContainer(0.12, 0.1)}
+            initial="hidden"
+            animate="visible"
+            className="max-w-2xl"
+          >
+            <motion.h1 variants={staggerItem()} className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
               {c.title}
-            </h1>
-            <p className="mt-4 text-lg text-ink-500">{c.subtitle}</p>
-          </div>
+            </motion.h1>
+            <motion.p variants={staggerItem()} className="mt-4 text-lg text-ink-500">{c.subtitle}</motion.p>
+          </motion.div>
         </div>
       </section>
 
@@ -121,7 +128,14 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
             {/* FORM */}
-            <div className="reveal rounded-2xl border border-hairline bg-surface p-6 shadow-soft sm:p-8">
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+              className="rounded-2xl border border-hairline bg-surface p-6 shadow-soft sm:p-8"
+            >
               {status === 'success' ? (
                 <div className="flex flex-col items-center justify-center py-10 text-center">
                   <CheckCircle2 className="h-14 w-14 text-emerald" />
@@ -171,22 +185,37 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
                     </div>
                   )}
 
-                  <button type="submit" disabled={status === 'loading'}
-                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-emerald px-6 py-3.5 text-base font-600 text-cream-50 shadow-soft transition-transform hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-70">
+                  <motion.button
+                    type="submit"
+                    disabled={status === 'loading'}
+                    whileTap={reduced ? undefined : { scale: 0.95 }}
+                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-emerald px-6 py-3.5 text-base font-600 text-cream-50 shadow-soft disabled:cursor-not-allowed disabled:opacity-70"
+                  >
                     {status === 'loading' ? (
                       <><Loader2 className="h-5 w-5 animate-spin" /> {c.sending}</>
                     ) : (
                       <><Send className="h-5 w-5" /> {c.sendButton}</>
                     )}
-                  </button>
+                  </motion.button>
                 </form>
               )}
-            </div>
+            </motion.div>
 
             {/* CONTACT INFO */}
-            <div className="reveal space-y-4">
-              <a href={`tel:${t.common.phoneDial}`}
-                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30">
+            <motion.div
+              variants={staggerContainer(0.08)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              className="space-y-4"
+            >
+              <motion.a
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { x: 4 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                href={`tel:${t.common.phoneDial}`}
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
+              >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
                   <Phone className="h-6 w-6 text-emerald" />
                 </div>
@@ -194,10 +223,15 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
                   <div className="text-sm text-ink-500">{c.callNow}</div>
                   <div className="text-lg font-600 text-ink">{t.common.phoneNumber}</div>
                 </div>
-              </a>
+              </motion.a>
 
-              <a href="https://wa.me/[PHONE-DIGITS-NO-PLUS]" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30">
+              <motion.a
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { x: 4 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                href="https://wa.me/[PHONE-DIGITS-NO-PLUS]" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
+              >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
                   <MessageCircle className="h-6 w-6 text-emerald" />
                 </div>
@@ -205,10 +239,15 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
                   <div className="text-sm text-ink-500">{c.whatsapp}</div>
                   <div className="text-lg font-600 text-ink">{c.whatsappAction}</div>
                 </div>
-              </a>
+              </motion.a>
 
-              <a href="https://t.me/[TELEGRAM-USERNAME]" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30">
+              <motion.a
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { x: 4 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                href="https://t.me/[TELEGRAM-USERNAME]" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
+              >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
                   <Send className="h-6 w-6 text-emerald" />
                 </div>
@@ -216,10 +255,15 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
                   <div className="text-sm text-ink-500">{c.telegram}</div>
                   <div className="text-lg font-600 text-ink">{c.telegramAction}</div>
                 </div>
-              </a>
+              </motion.a>
 
-              <a href={`mailto:${t.common.contactEmail}`}
-                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30">
+              <motion.a
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { x: 4 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                href={`mailto:${t.common.contactEmail}`}
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
+              >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
                   <Mail className="h-6 w-6 text-emerald" />
                 </div>
@@ -227,9 +271,12 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
                   <div className="text-sm text-ink-500">{c.emailAction}</div>
                   <div className="text-lg font-600 text-ink">{t.common.contactEmail}</div>
                 </div>
-              </a>
+              </motion.a>
 
-              <div className="rounded-2xl border border-hairline bg-surface p-5 shadow-card">
+              <motion.div
+                variants={staggerItem()}
+                className="rounded-2xl border border-hairline bg-surface p-5 shadow-card"
+              >
                 <div className="flex items-center gap-2 text-ink-600">
                   <MapPin className="h-5 w-5 text-emerald" />
                   <span className="font-600 text-ink">{c.serviceArea}</span>
@@ -240,8 +287,8 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
                   <span className="font-600 text-ink">{c.hours}</span>
                 </div>
                 <p className="mt-2 text-sm leading-relaxed text-ink-500">{c.hoursDesc}</p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>

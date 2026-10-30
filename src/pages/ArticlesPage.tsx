@@ -1,15 +1,19 @@
 import { useState, useMemo } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Clock, Tag } from 'lucide-react';
 import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
-import { useReveal } from '@/lib/useReveal';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { ARTICLES } from '@/lib/articles';
+import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
+
+const viewportOnce = { once: true, margin: '-60px' as const };
 
 export function ArticlesPage({ navigate }: { navigate: (to: Route) => void }) {
   const { t, locale, dir, digits } = useI18n();
   const a = t.articles;
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
+  const reduced = useReducedMotion();
 
   const categories = useMemo(() => {
     const cats = new Set(ARTICLES.map((art) => art.category[locale]));
@@ -24,25 +28,36 @@ export function ArticlesPage({ navigate }: { navigate: (to: Route) => void }) {
   }, [active, locale, a.allCategories]);
 
   useSeo({ title: a.metaTitle, description: a.metaDesc, path: '/articles' });
-  useReveal();
 
   return (
     <>
       <section className="relative overflow-hidden bg-cream pt-16 sm:pt-20">
         <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
-          <div className="reveal mx-auto max-w-2xl text-center">
-            <h1 className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
+          <motion.div
+            variants={staggerContainer(0.12, 0.1)}
+            initial="hidden"
+            animate="visible"
+            className="mx-auto max-w-2xl text-center"
+          >
+            <motion.h1 variants={staggerItem()} className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
               {a.title}
-            </h1>
-            <p className="mt-4 text-lg text-ink-500">{a.subtitle}</p>
-          </div>
+            </motion.h1>
+            <motion.p variants={staggerItem()} className="mt-4 text-lg text-ink-500">{a.subtitle}</motion.p>
+          </motion.div>
         </div>
       </section>
 
       <section className="bg-cream py-12 sm:py-16">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-          <div className="reveal mb-8 flex flex-wrap gap-2">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="mb-8 flex flex-wrap gap-2"
+          >
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -56,15 +71,23 @@ export function ArticlesPage({ navigate }: { navigate: (to: Route) => void }) {
                 {cat}
               </button>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            key={active}
+            variants={staggerContainer(0.08)}
+            initial="hidden"
+            animate="visible"
+            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+          >
             {filtered.map((art, i) => (
-              <button
+              <motion.button
                 key={art.slug}
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { y: -6 }}
+                transition={{ duration: 0.4, ease: EASE }}
                 onClick={() => navigate(`/articles/${art.slug}`)}
-                className="reveal group flex flex-col rounded-2xl border border-hairline bg-surface p-6 text-left shadow-card transition-all hover:-translate-y-1 hover:border-emerald/30"
-                style={{ transitionDelay: `${i * 70}ms` }}
+                className="group flex flex-col rounded-2xl border border-hairline bg-surface p-6 text-left shadow-card hover:border-emerald/30"
               >
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">
@@ -85,9 +108,9 @@ export function ArticlesPage({ navigate }: { navigate: (to: Route) => void }) {
                     {digits(String(art.readingTime))} {a.readingTime}
                   </span>
                 </div>
-              </button>
+              </motion.button>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
     </>

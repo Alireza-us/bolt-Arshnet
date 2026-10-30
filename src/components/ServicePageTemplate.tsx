@@ -5,13 +5,13 @@ import {
   ArrowLeft,
   Camera,
 } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
-import { useReveal } from '@/lib/useReveal';
 import { useI18n } from '@/lib/i18n/index.tsx';
-import type { Translations } from '@/lib/i18n/en';
 import { CtaButton } from '@/components/CtaButton';
 import { Faq, type FaqItem } from '@/components/Faq';
+import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
 
 export type ServiceKey = 'cameras' | 'voip' | 'network';
 
@@ -27,6 +27,8 @@ const ICONS: Record<ServiceKey, typeof Camera> = {
   network: Camera,
 };
 
+const viewportOnce = { once: true, margin: '-60px' as const };
+
 export function ServicePageTemplate({
   serviceKey,
   navigate,
@@ -40,9 +42,11 @@ export function ServicePageTemplate({
   const Icon = ICONS[serviceKey];
   const color = COLORS[serviceKey];
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
+  const reduced = useReducedMotion();
+  const heroVariants = staggerContainer(0.12, 0.1);
+  const item = staggerItem();
 
   useSeo({ title: d.metaTitle, description: d.metaDesc, path: `/${serviceKey}` });
-  useReveal();
 
   return (
     <>
@@ -55,20 +59,26 @@ export function ServicePageTemplate({
           aria-hidden="true"
         />
         <div className="relative mx-auto max-w-8xl px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8">
-          <div className="reveal max-w-3xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3.5 py-1.5 text-xs font-600 uppercase tracking-wider text-ink-500">
+          <motion.div
+            variants={heroVariants}
+            initial="hidden"
+            animate="visible"
+            className="max-w-3xl"
+          >
+            <motion.div variants={item} className="mb-5 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3.5 py-1.5 text-xs font-600 uppercase tracking-wider text-ink-500">
               {d.heroEyebrow}
-            </div>
-            <div
+            </motion.div>
+            <motion.div
+              variants={item}
               className="flex h-16 w-16 items-center justify-center rounded-2xl"
               style={{ background: `${color}0d` }}
             >
               <Icon className="h-8 w-8" style={{ color }} />
-            </div>
-            <h1 className="mt-6 text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
+            </motion.div>
+            <motion.h1 variants={item} className="mt-6 text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
               {d.heroTitle}
-            </h1>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            </motion.h1>
+            <motion.div variants={item} className="mt-7 flex flex-col gap-3 sm:flex-row">
               <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
               <a
                 href={`tel:${t.common.phoneDial}`}
@@ -76,15 +86,22 @@ export function ServicePageTemplate({
               >
                 <Phone className="h-5 w-5" /> {t.common.phoneNumber}
               </a>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* PROBLEM */}
       <section className="bg-cream py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="reveal grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="grid gap-10 lg:grid-cols-[1fr_1.4fr]"
+          >
             <h2 className="text-2xl font-700 text-ink sm:text-3xl">
               {d.problemTitle}
             </h2>
@@ -102,7 +119,7 @@ export function ServicePageTemplate({
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -110,29 +127,51 @@ export function ServicePageTemplate({
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
         <div className="bg-circuit absolute inset-0 opacity-40" aria-hidden="true" />
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="reveal rounded-2xl border border-hairline bg-cream-50 p-6 sm:p-10 shadow-soft">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="rounded-2xl border border-hairline bg-cream-50 p-6 sm:p-10 shadow-soft"
+          >
             <h2 className="text-2xl font-700 text-ink sm:text-3xl">
               {d.solutionTitle}
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-ink-500">
               {d.solutionDesc}
             </p>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* WHAT'S INCLUDED */}
       <section className="bg-cream py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <h2 className="reveal text-2xl font-700 text-ink sm:text-3xl">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="text-2xl font-700 text-ink sm:text-3xl"
+          >
             {d.includedTitle}
-          </h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          </motion.h2>
+          <motion.div
+            variants={staggerContainer(0.08)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="mt-8 grid gap-4 sm:grid-cols-2"
+          >
             {d.included.map((item, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="reveal flex items-start gap-3 rounded-xl border border-hairline bg-surface p-4 shadow-card"
-                style={{ transitionDelay: `${i * 60}ms` }}
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { y: -3 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="flex items-start gap-3 rounded-xl border border-hairline bg-surface p-4 shadow-card"
               >
                 <div
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
@@ -141,24 +180,39 @@ export function ServicePageTemplate({
                   <Check className="h-5 w-5" style={{ color }} />
                 </div>
                 <span className="pt-2 text-base text-ink-600">{item}</span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* PROCESS */}
       <section className="bg-surface py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <h2 className="reveal text-2xl font-700 text-ink sm:text-3xl">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="text-2xl font-700 text-ink sm:text-3xl"
+          >
             {d.processTitle}
-          </h2>
-          <div className="mt-8 space-y-4">
+          </motion.h2>
+          <motion.div
+            variants={staggerContainer(0.1)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="mt-8 space-y-4"
+          >
             {d.process.map((step, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="reveal flex gap-4 rounded-xl border border-hairline bg-cream-50 p-5 shadow-card"
-                style={{ transitionDelay: `${i * 60}ms` }}
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { x: 4 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="flex gap-4 rounded-xl border border-hairline bg-cream-50 p-5 shadow-card"
               >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald text-sm font-700 text-cream-50">
                   {i + 1}
@@ -169,26 +223,40 @@ export function ServicePageTemplate({
                     {step.desc}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* FAQ */}
       <section className="bg-cream py-16 sm:py-20">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-          <div className="reveal mx-auto max-w-2xl text-center">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="mx-auto max-w-2xl text-center"
+          >
             <h2 className="text-2xl font-700 text-ink sm:text-3xl">
               {t.serviceFaqHeading}
             </h2>
             <p className="mt-3 text-ink-500">
               {t.serviceFaqSubtitle}
             </p>
-          </div>
-          <div className="mt-10">
+          </motion.div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE, delay: 0.1 }}
+            className="mt-10"
+          >
             <Faq items={faqs} />
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -196,13 +264,34 @@ export function ServicePageTemplate({
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
         <div className="bg-grid bg-grid-fade absolute inset-0 opacity-50" aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="reveal text-3xl font-700 leading-[1.15] text-ink sm:text-4xl">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="text-3xl font-700 leading-[1.15] text-ink sm:text-4xl"
+          >
             {t.common.readyToStart}
-          </h2>
-          <p className="reveal mt-4 text-lg text-ink-500">
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE, delay: 0.1 }}
+            className="mt-4 text-lg text-ink-500"
+          >
             {t.common.bookFreeConsult}
-          </p>
-          <div className="reveal mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          </motion.p>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE, delay: 0.2 }}
+            className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
+          >
             <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
             <button
               onClick={() => navigate('/pricing')}
@@ -210,7 +299,7 @@ export function ServicePageTemplate({
             >
               {t.common.seePricing} <BackIcon className="h-4 w-4" />
             </button>
-          </div>
+          </motion.div>
         </div>
       </section>
     </>

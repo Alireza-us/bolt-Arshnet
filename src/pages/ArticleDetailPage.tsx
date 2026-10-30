@@ -1,10 +1,13 @@
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Clock, Tag, CalendarDays, Share2 } from 'lucide-react';
 import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
-import { useReveal } from '@/lib/useReveal';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
 import { getArticleBySlug, getRelatedArticles } from '@/lib/articles';
+import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
+
+const viewportOnce = { once: true, margin: '-60px' as const };
 
 export function ArticleDetailPage({
   navigate,
@@ -16,6 +19,7 @@ export function ArticleDetailPage({
   const { t, locale, dir, digits } = useI18n();
   const a = t.articles;
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
+  const reduced = useReducedMotion();
 
   const article = getArticleBySlug(slug);
 
@@ -24,7 +28,6 @@ export function ArticleDetailPage({
     description: article ? article.excerpt[locale] : a.metaDesc,
     path: `/articles/${slug}`,
   });
-  useReveal();
 
   if (!article) {
     return (
@@ -63,49 +66,76 @@ export function ArticleDetailPage({
       <section className="relative overflow-hidden bg-cream pt-14 sm:pt-16">
         <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={() => navigate('/articles')}
-            className="reveal inline-flex items-center gap-1.5 text-sm font-600 text-ink-500 transition-colors hover:text-emerald"
+          <motion.div
+            variants={staggerContainer(0.1, 0.05)}
+            initial="hidden"
+            animate="visible"
           >
-            <BackIcon className="h-4 w-4" />
-            {a.backToList}
-          </button>
+            <motion.button
+              variants={staggerItem()}
+              onClick={() => navigate('/articles')}
+              className="inline-flex items-center gap-1.5 text-sm font-600 text-ink-500 transition-colors hover:text-emerald"
+            >
+              <BackIcon className="h-4 w-4" />
+              {a.backToList}
+            </motion.button>
 
-          <div className="reveal mt-6 flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">
-              <Tag className="h-3 w-3" />
-              {article.category[locale]}
-            </span>
-            <span className="flex items-center gap-1.5 text-xs text-ink-400">
-              <CalendarDays className="h-3.5 w-3.5" />
-              {formatDate(article.date, locale)}
-            </span>
-            <span className="flex items-center gap-1.5 text-xs text-ink-400">
-              <Clock className="h-3.5 w-3.5" />
-              {digits(String(article.readingTime))} {a.readingTime}
-            </span>
-          </div>
+            <motion.div variants={staggerItem()} className="mt-6 flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">
+                <Tag className="h-3 w-3" />
+                {article.category[locale]}
+              </span>
+              <span className="flex items-center gap-1.5 text-xs text-ink-400">
+                <CalendarDays className="h-3.5 w-3.5" />
+                {formatDate(article.date, locale)}
+              </span>
+              <span className="flex items-center gap-1.5 text-xs text-ink-400">
+                <Clock className="h-3.5 w-3.5" />
+                {digits(String(article.readingTime))} {a.readingTime}
+              </span>
+            </motion.div>
 
-          <h1 className="reveal mt-5 text-3xl font-700 leading-[1.15] text-ink sm:text-4xl">
-            {article.title[locale]}
-          </h1>
-          <p className="reveal mt-4 text-lg leading-relaxed text-ink-600">
-            {article.excerpt[locale]}
-          </p>
+            <motion.h1
+              variants={staggerItem()}
+              className="mt-5 text-3xl font-700 leading-[1.15] text-ink sm:text-4xl"
+            >
+              {article.title[locale]}
+            </motion.h1>
+            <motion.p
+              variants={staggerItem()}
+              className="mt-4 text-lg leading-relaxed text-ink-600"
+            >
+              {article.excerpt[locale]}
+            </motion.p>
+          </motion.div>
         </div>
       </section>
 
       <article className="bg-cream py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="reveal space-y-6">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="space-y-6"
+          >
             {article.body[locale].map((para, i) => (
               <p key={i} className="text-base leading-[1.8] text-ink-600 sm:text-lg">
                 {para}
               </p>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="reveal mt-10 flex items-center justify-between border-t border-hairline pt-6">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="mt-10 flex items-center justify-between border-t border-hairline pt-6"
+          >
             <button
               onClick={() => navigate('/articles')}
               className="inline-flex items-center gap-1.5 text-sm font-600 text-ink-500 transition-colors hover:text-emerald"
@@ -120,21 +150,38 @@ export function ArticleDetailPage({
               <Share2 className="h-4 w-4" />
               {a.shareArticle}
             </button>
-          </div>
+          </motion.div>
         </div>
       </article>
 
       {related.length > 0 && (
         <section className="bg-surface py-14 sm:py-16">
           <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-            <h2 className="reveal text-2xl font-700 text-ink">{a.relatedTitle}</h2>
-            <div className="mt-8 grid gap-6 md:grid-cols-2">
+            <motion.h2
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+              className="text-2xl font-700 text-ink"
+            >
+              {a.relatedTitle}
+            </motion.h2>
+            <motion.div
+              variants={staggerContainer(0.1)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              className="mt-8 grid gap-6 md:grid-cols-2"
+            >
               {related.map((rel, i) => (
-                <button
+                <motion.button
                   key={rel.slug}
+                  variants={staggerItem()}
+                  whileHover={reduced ? undefined : { y: -4 }}
+                  transition={{ duration: 0.4, ease: EASE }}
                   onClick={() => navigate(`/articles/${rel.slug}`)}
-                  className="reveal group flex flex-col rounded-2xl border border-hairline bg-cream-50 p-6 text-left shadow-card transition-all hover:-translate-y-1 hover:border-emerald/30"
-                  style={{ transitionDelay: `${i * 70}ms` }}
+                  className="group flex flex-col rounded-2xl border border-hairline bg-cream-50 p-6 text-left shadow-card hover:border-emerald/30"
                 >
                   <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">
                     <Tag className="h-3 w-3" />
@@ -146,9 +193,9 @@ export function ArticleDetailPage({
                   <p className="mt-2 text-sm leading-relaxed text-ink-500">
                     {rel.excerpt[locale]}
                   </p>
-                </button>
+                </motion.button>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
       )}
@@ -156,11 +203,34 @@ export function ArticleDetailPage({
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
         <div className="bg-grid bg-grid-fade absolute inset-0 opacity-50" aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="reveal text-3xl font-700 leading-[1.15] text-ink sm:text-4xl">
+          <motion.h2
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="text-3xl font-700 leading-[1.15] text-ink sm:text-4xl"
+          >
             {t.common.readyToStart}
-          </h2>
-          <p className="reveal mt-4 text-lg text-ink-500">{t.common.bookFreeConsult}</p>
-          <div className="reveal mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          </motion.h2>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE, delay: 0.1 }}
+            className="mt-4 text-lg text-ink-500"
+          >
+            {t.common.bookFreeConsult}
+          </motion.p>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE, delay: 0.2 }}
+            className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
+          >
             <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
             <button
               onClick={() => navigate('/contact')}
@@ -169,7 +239,7 @@ export function ArticleDetailPage({
               {t.nav.contact}
               <BackIcon className="h-4 w-4" />
             </button>
-          </div>
+          </motion.div>
         </div>
       </section>
     </>

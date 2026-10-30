@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from '@/lib/router';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -14,6 +15,22 @@ import { ArticlesPage } from '@/pages/ArticlesPage';
 import { ArticleDetailPage } from '@/pages/ArticleDetailPage';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { CursorGlow } from '@/components/CursorGlow';
+import { EASE } from '@/lib/motion';
+
+function renderRoute(route: string, navigate: (to: string) => void) {
+  if (route === '/') return <HomePage navigate={navigate} />;
+  if (route === '/cameras') return <CamerasPage navigate={navigate} />;
+  if (route === '/voip') return <VoipPage navigate={navigate} />;
+  if (route === '/network') return <NetworkPage navigate={navigate} />;
+  if (route === '/pricing') return <PricingPage navigate={navigate} />;
+  if (route === '/case-studies') return <CaseStudiesPage navigate={navigate} />;
+  if (route === '/about') return <AboutPage navigate={navigate} />;
+  if (route === '/contact') return <ContactPage navigate={navigate} />;
+  if (route === '/articles') return <ArticlesPage navigate={navigate} />;
+  if (route.startsWith('/articles/'))
+    return <ArticleDetailPage navigate={navigate} slug={route.replace('/articles/', '')} />;
+  return <HomePage navigate={navigate} />;
+}
 
 function App() {
   const { route, navigate } = useRouter();
@@ -24,18 +41,17 @@ function App() {
       <CursorGlow />
       <Header route={route} navigate={navigate} />
       <main className="flex-1 pb-16 lg:pb-0">
-        {route === '/' && <HomePage navigate={navigate} />}
-        {route === '/cameras' && <CamerasPage navigate={navigate} />}
-        {route === '/voip' && <VoipPage navigate={navigate} />}
-        {route === '/network' && <NetworkPage navigate={navigate} />}
-        {route === '/pricing' && <PricingPage navigate={navigate} />}
-        {route === '/case-studies' && <CaseStudiesPage navigate={navigate} />}
-        {route === '/about' && <AboutPage navigate={navigate} />}
-        {route === '/contact' && <ContactPage navigate={navigate} />}
-        {route === '/articles' && <ArticlesPage navigate={navigate} />}
-        {route.startsWith('/articles/') && (
-          <ArticleDetailPage navigate={navigate} slug={route.replace('/articles/', '')} />
-        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={route}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            {renderRoute(route, navigate)}
+          </motion.div>
+        </AnimatePresence>
       </main>
       <Footer navigate={navigate} />
       <MobileCallBar />

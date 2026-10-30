@@ -1,46 +1,62 @@
+import { motion, useReducedMotion } from 'framer-motion';
 import { Check, Minus, ArrowRight, ArrowLeft } from 'lucide-react';
 import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
-import { useReveal } from '@/lib/useReveal';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
 import { SectionHeading } from '@/components/SectionHeading';
+import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
+
+const viewportOnce = { once: true, margin: '-60px' as const };
 
 export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
   const { t, dir } = useI18n();
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const p = t.pricing;
+  const reduced = useReducedMotion();
 
   useSeo({ title: p.metaTitle, description: p.metaDesc, path: '/pricing' });
-  useReveal();
 
   return (
     <>
       <section className="relative overflow-hidden bg-cream pt-16 sm:pt-20">
         <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
-          <div className="reveal mx-auto max-w-2xl text-center">
-            <h1 className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
+          <motion.div
+            variants={staggerContainer(0.12, 0.1)}
+            initial="hidden"
+            animate="visible"
+            className="mx-auto max-w-2xl text-center"
+          >
+            <motion.h1 variants={staggerItem()} className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
               {p.title}
-            </h1>
-            <p className="mt-4 text-lg text-ink-500">{p.subtitle}</p>
-          </div>
+            </motion.h1>
+            <motion.p variants={staggerItem()} className="mt-4 text-lg text-ink-500">{p.subtitle}</motion.p>
+          </motion.div>
         </div>
       </section>
 
       {/* PLANS */}
       <section className="bg-cream py-14 sm:py-16">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 lg:grid-cols-3">
+          <motion.div
+            variants={staggerContainer(0.12)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="grid gap-6 lg:grid-cols-3"
+          >
             {p.plans.map((plan, i) => (
-              <div
+              <motion.div
                 key={plan.name}
-                className={`reveal relative flex flex-col rounded-2xl border p-6 sm:p-7 ${
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { y: -6 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className={`relative flex flex-col rounded-2xl border p-6 sm:p-7 ${
                   i === 1
                     ? 'border-emerald/40 bg-surface shadow-soft ring-1 ring-emerald/20'
                     : 'border-hairline bg-surface shadow-card'
                 }`}
-                style={{ transitionDelay: `${i * 80}ms` }}
               >
                 {i === 1 && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald px-3 py-1 text-xs font-700 text-cream-50">
@@ -68,9 +84,9 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
                     className="w-full"
                   />
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -78,7 +94,14 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
       <section className="bg-surface py-14 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <SectionHeading eyebrow={p.compareEyebrow} title={p.compareTitle} align="left" />
-          <div className="reveal mt-8 overflow-x-auto rounded-2xl border border-hairline bg-cream-50 shadow-card">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="mt-8 overflow-x-auto rounded-2xl border border-hairline bg-cream-50 shadow-card"
+          >
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-hairline bg-cream-200">
@@ -99,7 +122,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
                 ))}
               </tbody>
             </table>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -112,19 +135,34 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
             subtitle={p.projectSubtitle}
             align="left"
           />
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <motion.div
+            variants={staggerContainer(0.08)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="mt-8 grid gap-4 sm:grid-cols-3"
+          >
             {p.projects.map((proj, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="reveal rounded-2xl border border-hairline bg-surface p-5 shadow-card"
-                style={{ transitionDelay: `${i * 70}ms` }}
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { y: -3 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="rounded-2xl border border-hairline bg-surface p-5 shadow-card"
               >
                 <div className="text-sm text-ink-500">{proj.label}</div>
                 <div className="mt-2 text-xl font-700 text-emerald">{proj.from}</div>
-              </div>
+              </motion.div>
             ))}
-          </div>
-          <div className="reveal mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          </motion.div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
+          >
             <CtaButton navigate={navigate} />
             <button
               onClick={() => navigate('/contact')}
@@ -132,7 +170,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
             >
               {p.askCustomJob} <BackIcon className="h-4 w-4" />
             </button>
-          </div>
+          </motion.div>
         </div>
       </section>
     </>

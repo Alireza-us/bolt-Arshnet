@@ -1,40 +1,56 @@
+import { motion, useReducedMotion } from 'framer-motion';
 import { TrendingUp, ArrowRight, ArrowLeft } from 'lucide-react';
 import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
-import { useReveal } from '@/lib/useReveal';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
+import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
+
+const viewportOnce = { once: true, margin: '-60px' as const };
 
 export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void }) {
   const { t, dir } = useI18n();
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const cs = t.caseStudies;
+  const reduced = useReducedMotion();
 
   useSeo({ title: cs.metaTitle, description: cs.metaDesc, path: '/case-studies' });
-  useReveal();
 
   return (
     <>
       <section className="relative overflow-hidden bg-cream pt-16 sm:pt-20">
         <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
-          <div className="reveal mx-auto max-w-2xl text-center">
-            <h1 className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
+          <motion.div
+            variants={staggerContainer(0.12, 0.1)}
+            initial="hidden"
+            animate="visible"
+            className="mx-auto max-w-2xl text-center"
+          >
+            <motion.h1 variants={staggerItem()} className="text-3xl font-700 leading-[1.12] text-ink sm:text-4xl lg:text-5xl">
               {cs.title}
-            </h1>
-            <p className="mt-4 text-lg text-ink-500">{cs.subtitle}</p>
-          </div>
+            </motion.h1>
+            <motion.p variants={staggerItem()} className="mt-4 text-lg text-ink-500">{cs.subtitle}</motion.p>
+          </motion.div>
         </div>
       </section>
 
       <section className="bg-cream py-14 sm:py-16">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 lg:grid-cols-3">
+          <motion.div
+            variants={staggerContainer(0.12)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="grid gap-6 lg:grid-cols-3"
+          >
             {cs.studies.map((s, i) => (
-              <article
+              <motion.article
                 key={i}
-                className="reveal flex flex-col rounded-2xl border border-hairline bg-surface p-6 shadow-card"
-                style={{ transitionDelay: `${i * 90}ms` }}
+                variants={staggerItem()}
+                whileHover={reduced ? undefined : { y: -6 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="flex flex-col rounded-2xl border border-hairline bg-surface p-6 shadow-card"
               >
                 <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">
                   {s.type}
@@ -63,11 +79,18 @@ export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void })
                     <div className="text-xs text-ink-500">{s.metricLabel}</div>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="reveal mt-12 rounded-2xl border border-hairline bg-surface p-8 text-center shadow-soft sm:p-10">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+            className="mt-12 rounded-2xl border border-hairline bg-surface p-8 text-center shadow-soft sm:p-10"
+          >
             <h2 className="text-2xl font-700 text-ink sm:text-3xl">{cs.wantSimilar}</h2>
             <p className="mx-auto mt-3 max-w-lg text-ink-500">{cs.wantSimilarDesc}</p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -79,7 +102,7 @@ export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void })
                 {t.common.seePricing} <BackIcon className="h-4 w-4" />
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </>

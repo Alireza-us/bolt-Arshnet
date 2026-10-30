@@ -1,3 +1,6 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { EASE } from '@/lib/motion';
+
 export function SectionHeading({
   eyebrow,
   title,
@@ -9,9 +12,19 @@ export function SectionHeading({
   subtitle?: string;
   align?: 'center' | 'left';
 }) {
+  const reduced = useReducedMotion();
+  const variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
   return (
-    <div
-      className={`reveal max-w-2xl ${align === 'center' ? 'mx-auto text-center' : 'text-left'}`}
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+      variants={variants}
+      transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
+      className={`max-w-2xl ${align === 'center' ? 'mx-auto text-center' : 'text-left'}`}
     >
       {eyebrow && (
         <div className="mb-3 text-xs font-600 uppercase tracking-[0.2em] text-champagne-600">
@@ -26,6 +39,6 @@ export function SectionHeading({
           {subtitle}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }
