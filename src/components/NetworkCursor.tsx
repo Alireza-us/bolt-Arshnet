@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 const SEGMENT_COUNT = 26;
 const SEGMENT_LENGTH = 8;
 const CABLE_ANCHOR_DISTANCE = 20;
-const DAMPING = 0.612;
+const DAMPING = 0.5508;
 const IDLE_SWAY = 0.34;
+const ROTATION_SMOOTHING = 0.12;
 const CABLE_COLOR = '#1F3D36';
 const HIGHLIGHT_COLOR = '#C8A15A';
 const CABLE_WIDTH = 3;
@@ -55,6 +56,7 @@ export function NetworkCursor() {
     let prevMouseX = mouseX;
     let prevMouseY = mouseY;
     let mouseAngle = 0;
+    let targetMouseAngle = 0;
     let mouseSpeed = 0;
     let mouseInside = true;
     let overTextInput = false;
@@ -70,7 +72,7 @@ export function NetworkCursor() {
     type Point = { x: number; y: number; px: number; py: number };
     const chain: Point[] = [];
     for (let i = 0; i < SEGMENT_COUNT; i++) {
-      chain.push({ x: mouseX, y: mouseY, px: mouseX, py: mouseY });
+      chain.push({ x: mouseX - CABLE_ANCHOR_DISTANCE, y: mouseY, px: mouseX - CABLE_ANCHOR_DISTANCE, py: mouseY });
     }
 
     // ── Event handlers ──────────────────────────────────────────────
@@ -101,7 +103,7 @@ export function NetworkCursor() {
       mouseSpeed = Math.sqrt(dx * dx + dy * dy);
 
       if (mouseSpeed > 1.5) {
-        mouseAngle = Math.atan2(dy, dx);
+        targetMouseAngle = Math.atan2(dy, dx);
       }
 
       const el = document.elementFromPoint(e.clientX, e.clientY);
@@ -145,14 +147,16 @@ export function NetworkCursor() {
     document.addEventListener('mouseleave', onMouseLeave);
     document.addEventListener('mouseenter', onMouseEnter);
     window.addEventListener('resize', resize);
+
     // ── Animation loop ──────────────────────────────────────────────
     let raf = 0;
     let running = true;
 
     function updateChain() {
-      // Head follows mouse
+      // Head follows the exact rear point of the plug boot
       const anchorX = mouseX - Math.cos(mouseAngle) * CABLE_ANCHOR_DISTANCE * plugScale;
       const anchorY = mouseY - Math.sin(mouseAngle) * CABLE_ANCHOR_DISTANCE * plugScale;
+
       chain[0].x = anchorX;
       chain[0].y = anchorY;
       chain[0].px = anchorX;
@@ -161,6 +165,7 @@ export function NetworkCursor() {
       // Verlet constraints for rest of chain
       for (let i = 1; i < chain.length; i++) {
         const p = chain[i];
+
         // Inertia (verlet integration)
         const vx = (p.x - p.px) * DAMPING;
         const vy = (p.y - p.py) * DAMPING;
@@ -199,13 +204,13 @@ export function NetworkCursor() {
           p.x -= dx * diff;
           p.y -= dy * diff;
         }
-      }
 
-      // Re-pin cable head to the plug boot rear
-      chain[0].x = anchorX;
-      chain[0].y = anchorY;
-      chain[0].px = anchorX;
-      chain[0].py = anchorY;
+        // Keep the head immovable during constraint passes
+        chain[0].x = anchorX;
+        chain[0].y = anchorY;
+        chain[0].px = anchorX;
+        chain[0].py = anchorY;
+      }
     }
 
     function drawCable() {
@@ -287,7 +292,9 @@ export function NetworkCursor() {
       const angleDeg = (mouseAngle * 180) / Math.PI;
       const ledOpacity = hovering ? 0.5 + Math.sin(ledBlink) * 0.5 : 0;
 
-      svgRef.current.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%) rotate(${angleDeg}deg) scale(${plugScale})`;
+      // Use a top-left transform origin so the center stays pinned to the mouse
+      svgRef.current.style.transformOrigin = '0 0';
+      svgRef.current.style.transform = `translate(${mouseX}px, ${mouseY}px) rotate(${angleDeg}deg) scale(${plugScale}) translate(-50%, -50%)`;
       svgRef.current.style.opacity = String(opacity);
 
       // Update LED
@@ -304,8 +311,15 @@ export function NetworkCursor() {
       const targetOpacity = mouseInside && !overTextInput ? 1 : 0;
       opacity += (targetOpacity - opacity) * 0.1;
 
+      // Smooth rotation using the shortest angular path
+      const angleDelta = Math.atan2(
+        Math.sin(targetMouseAngle - mouseAngle),
+        Math.cos(targetMouseAngle - mouseAngle)
+      );
+      mouseAngle += angleDelta * ROTATION_SMOOTHING;
+
       // Decay mouse speed
-      mouseSpeed *= 0.85;
+      mouseSpeed *= 0.765;
 
       if (!reducedMotion) {
         updateChain();
@@ -361,7 +375,7 @@ export function NetworkCursor() {
       <div
         ref={svgRef}
         className="pointer-events-none fixed left-0 top-0 z-[9999]"
-        style={{ opacity: 0, willChange: 'transform, opacity' }}
+        style={{ opacity: 0, willChange: 'transform, opacity', transformOrigin: '0 0' }}
         aria-hidden="true"
       >
         <svg width="44" height="26" viewBox="0 0 44 26" fill="none" xmlns="http://www.w3.org/2000/svg">
