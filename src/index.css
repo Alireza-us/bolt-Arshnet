@@ -88,6 +88,16 @@ h1, h2, h3, h4 {
   background-size: 28px 28px;
 }
 
+/* Custom network cursor is active only on precise-pointer devices */
+body.network-cursor-active {
+  cursor: none;
+}
+
+body.network-cursor-active input,
+body.network-cursor-active textarea {
+  cursor: text;
+}
+
 /* Focus ring */
 a:focus-visible,
 button:focus-visible,

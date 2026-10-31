@@ -1,0 +1,404 @@
+import { useEffect, useRef, useState } from 'react';
+
+// ── Tunable constants ──────────────────────────────────────────────
+const SEGMENT_COUNT = 26;
+const SEGMENT_LENGTH = 10;
+const CABLE_ANCHOR_DISTANCE = 18;
+const STIFFNESS = 0.22;
+const DAMPING = 0.72;
+const IDLE_SWAY = 0.4;
+const CABLE_COLOR = '#1F3D36';
+const HIGHLIGHT_COLOR = '#C8A15A';
+const CABLE_WIDTH = 3;
+const PLUG_SCALE = 1;
+const HOVER_SCALE = 1.15;
+const CLICK_SCALE = 1.3;
+const LED_COLOR = '#22C55E';
+const PULSE_DURATION = 600;
+const FADE_DURATION = 300;
+
+type Vec = { x: number; y: number };
+
+export function NetworkCursor() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const svgRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    if (!active || typeof window === 'undefined') return;
+
+    // ── Fallbacks ──────────────────────────────────────────────────
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+    if (isCoarse) return;
+    setActive(true);
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Canvas setup ──────────────────────────────────────────────────
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext('2d')!;
+    let dpr = window.devicePixelRatio || 1;
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+
+    // ── State ────────────────────────────────────────────────────────
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let prevMouseX = mouseX;
+    let prevMouseY = mouseY;
+    let mouseAngle = 0;
+    let mouseSpeed = 0;
+    let mouseInside = true;
+    let overTextInput = false;
+    let opacity = 0;
+    let hovering = false;
+    let clickPulse = 0;
+    let clickTime = 0;
+    let plugScale = PLUG_SCALE;
+    let targetScale = PLUG_SCALE;
+    let ledBlink = 0;
+
+    // ── Verlet chain ─────────────────────────────────────────────────
+    type Point = { x: number; y: number; px: number; py: number };
+    const chain: Point[] = [];
+    for (let i = 0; i < SEGMENT_COUNT; i++) {
+      chain.push({ x: mouseX, y: mouseY, px: mouseX, py: mouseY });
+    }
+
+    // ── Event handlers ──────────────────────────────────────────────
+    function isInteractive(el: Element | null): boolean {
+      if (!el) return false;
+      return !!el.closest('a, button, [role="button"], label, summary, .group');
+    }
+
+    function isTextInput(el: Element | null): boolean {
+      if (!el) return false;
+      const tag = el.tagName.toLowerCase();
+      if (tag === 'input') {
+        const type = (el as HTMLInputElement).type;
+        return ['text', 'email', 'tel', 'search', 'url', 'password', ''].includes(type);
+      }
+      return tag === 'textarea';
+    }
+
+    function onMouseMove(e: MouseEvent) {
+      prevMouseX = mouseX;
+      prevMouseY = mouseY;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      mouseInside = true;
+
+      const dx = mouseX - prevMouseX;
+      const dy = mouseY - prevMouseY;
+      mouseSpeed = Math.sqrt(dx * dx + dy * dy);
+
+      if (mouseSpeed > 1.5) {
+        mouseAngle = Math.atan2(dy, dx);
+      }
+
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const wasHovering = hovering;
+      overTextInput = isTextInput(el);
+      hovering = isInteractive(el) && !overTextInput;
+
+      if (hovering !== wasHovering) {
+        targetScale = hovering ? HOVER_SCALE : PLUG_SCALE;
+      }
+
+      if (overTextInput) {
+        document.body.classList.remove('network-cursor-active');
+      } else {
+        document.body.classList.add('network-cursor-active');
+      }
+    }
+
+    function onMouseDown() {
+      clickPulse = 1;
+      clickTime = performance.now();
+      if (hovering) targetScale = CLICK_SCALE;
+    }
+
+    function onMouseUp() {
+      targetScale = hovering ? HOVER_SCALE : PLUG_SCALE;
+    }
+
+    function onMouseLeave() {
+      mouseInside = false;
+      document.body.classList.remove('network-cursor-active');
+    }
+
+    function onMouseEnter() {
+      mouseInside = true;
+    }
+
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('mousedown', onMouseDown, { passive: true });
+    window.addEventListener('mouseup', onMouseUp, { passive: true });
+    document.addEventListener('mouseleave', onMouseLeave);
+    document.addEventListener('mouseenter', onMouseEnter);
+    window.addEventListener('resize', resize);
+    // ── Animation loop ──────────────────────────────────────────────
+    let raf = 0;
+    let running = true;
+
+    function updateChain() {
+      // Head follows mouse
+      chain[0].px = chain[0].x;
+      chain[0].py = chain[0].y;
+      const anchorX = mouseX - Math.cos(mouseAngle) * CABLE_ANCHOR_DISTANCE;
+      const anchorY = mouseY - Math.sin(mouseAngle) * CABLE_ANCHOR_DISTANCE;
+      chain[0].x += (anchorX - chain[0].x) * STIFFNESS;
+      chain[0].y += (anchorY - chain[0].y) * STIFFNESS;
+
+      // Verlet constraints for rest of chain
+      for (let i = 1; i < chain.length; i++) {
+        const p = chain[i];
+        p.px = p.x;
+        p.py = p.y;
+
+        // Inertia (verlet integration)
+        const vx = (p.x - p.px) * DAMPING;
+        const vy = (p.y - p.py) * DAMPING;
+        p.x += vx;
+        p.y += vy;
+
+        // Idle sway — subtle sine wave when cursor is still
+        if (mouseSpeed < 0.5 && !reducedMotion) {
+          const t = performance.now() * 0.001;
+          const swayAmount = IDLE_SWAY * (1 - i / chain.length);
+          p.x += Math.sin(t + i * 0.3) * swayAmount;
+          p.y += Math.cos(t + i * 0.2) * swayAmount;
+        }
+
+        // Distance constraint
+        const prev = chain[i - 1];
+        const dx = p.x - prev.x;
+        const dy = p.y - prev.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
+        const diff = (dist - SEGMENT_LENGTH) / dist;
+        p.x -= dx * diff * 0.5;
+        p.y -= dy * diff * 0.5;
+        prev.x += dx * diff * 0.5;
+        prev.y += dy * diff * 0.5;
+      }
+
+      // Multiple passes for stability
+      for (let pass = 0; pass < 3; pass++) {
+        for (let i = 1; i < chain.length; i++) {
+          const p = chain[i];
+          const prev = chain[i - 1];
+          const dx = p.x - prev.x;
+          const dy = p.y - prev.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
+          const diff = (dist - SEGMENT_LENGTH) / dist;
+          p.x -= dx * diff * 0.5;
+          p.y -= dy * diff * 0.5;
+          prev.x += dx * diff * 0.5;
+          prev.y += dy * diff * 0.5;
+        }
+      }
+    }
+
+    function drawCable() {
+      if (reducedMotion) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = opacity;
+
+      // Draw cable as smooth curve
+      const points = chain.map((p) => ({ x: p.x, y: p.y }));
+
+      // Main cable
+      ctx.strokeStyle = CABLE_COLOR;
+      ctx.lineWidth = CABLE_WIDTH;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length - 1; i++) {
+        const xc = (points[i].x + points[i + 1].x) / 2;
+        const yc = (points[i].y + points[i + 1].y) / 2;
+        ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+      }
+      const last = points[points.length - 1];
+      ctx.lineTo(last.x, last.y);
+      ctx.stroke();
+
+      // Champagne highlight (thin line offset slightly)
+      ctx.strokeStyle = HIGHLIGHT_COLOR;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = opacity * 0.4;
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length - 1; i++) {
+        const xc = (points[i].x + points[i + 1].x) / 2;
+        const yc = (points[i].y + points[i + 1].y) / 2;
+        ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+      }
+      ctx.lineTo(last.x, last.y);
+      ctx.stroke();
+      ctx.globalAlpha = opacity;
+
+      // Draw click pulse
+      if (clickPulse > 0) {
+        const elapsed = performance.now() - clickTime;
+        const progress = elapsed / PULSE_DURATION;
+        if (progress < 1) {
+          const radius = 10 + progress * 50;
+          ctx.strokeStyle = CABLE_COLOR;
+          ctx.lineWidth = 2;
+          ctx.globalAlpha = opacity * (1 - progress) * 0.6;
+          ctx.beginPath();
+          ctx.arc(mouseX, mouseY, radius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.globalAlpha = opacity;
+        } else {
+          clickPulse = 0;
+        }
+      }
+
+      ctx.globalAlpha = 1;
+    }
+
+    function updatePlug() {
+      if (!svgRef.current) return;
+
+      // Smooth scale lerp
+      plugScale += (targetScale - plugScale) * 0.18;
+
+      // LED blink when hovering
+      if (hovering) {
+        ledBlink += 0.08;
+      } else {
+        ledBlink = 0;
+      }
+
+      // Position the SVG plug at the mouse position
+      // The tip (right side) points toward movement direction
+      const angleDeg = (mouseAngle * 180) / Math.PI;
+      const ledOpacity = hovering ? 0.5 + Math.sin(ledBlink) * 0.5 : 0;
+
+      svgRef.current.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%) rotate(${angleDeg}deg) scale(${plugScale})`;
+      svgRef.current.style.opacity = String(opacity);
+
+      // Update LED
+      const ledEl = svgRef.current.querySelector('[data-led]');
+      if (ledEl) {
+        ledEl.setAttribute('opacity', String(ledOpacity));
+      }
+    }
+
+    function animate() {
+      if (!running) return;
+
+      // Fade in/out
+      const targetOpacity = mouseInside && !overTextInput ? 1 : 0;
+      opacity += (targetOpacity - opacity) * 0.1;
+
+      // Decay mouse speed
+      mouseSpeed *= 0.85;
+
+      if (!reducedMotion) {
+        updateChain();
+        drawCable();
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      updatePlug();
+
+      raf = requestAnimationFrame(animate);
+    }
+
+    raf = requestAnimationFrame(animate);
+
+    function onVisChange() {
+      if (document.hidden) {
+        running = false;
+        mouseInside = false;
+        cancelAnimationFrame(raf);
+      } else {
+        running = true;
+        mouseInside = true;
+        raf = requestAnimationFrame(animate);
+      }
+    }
+    document.addEventListener('visibilitychange', onVisChange);
+
+    // ── Cleanup ─────────────────────────────────────────────────────
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mouseleave', onMouseLeave);
+      document.removeEventListener('mouseenter', onMouseEnter);
+      window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', onVisChange);
+      document.body.classList.remove('network-cursor-active');
+    };
+  }, [active]);
+
+  if (!active) return null;
+
+  return (
+    <>
+      <canvas
+        ref={canvasRef}
+        className="pointer-events-none fixed inset-0 z-[9998]"
+        aria-hidden="true"
+      />
+      <div
+        ref={svgRef}
+        className="pointer-events-none fixed left-0 top-0 z-[9999]"
+        style={{ opacity: 0, willChange: 'transform, opacity' }}
+        aria-hidden="true"
+      >
+        <svg width="44" height="20" viewBox="0 0 44 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Cable-side strain relief */}
+          <path
+            d="M5 4 H10 V16 H5 Z"
+            fill="#1F3D36"
+            fillOpacity="0.12"
+            stroke="#1F3D36"
+            strokeWidth="1"
+            strokeLinejoin="round"
+          />
+          {/* Translucent clip tab */}
+          <path
+            d="M12 2 H31 V8 H25 L22 5 H12 Z"
+            fill="#1F3D36"
+            fillOpacity="0.12"
+            stroke="#1F3D36"
+            strokeWidth="1"
+            strokeLinejoin="round"
+          />
+          {/* Plug body */}
+          <path
+            d="M8 3 H37 L42 7 V13 L37 17 H8 Z"
+            fill="#E7E3DA"
+            stroke="#1F3D36"
+            strokeWidth="1.2"
+            strokeLinejoin="round"
+          />
+          {/* Gold contact pins at the pointer-facing tip */}
+          <line x1="37" y1="7" x2="42" y2="7" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="37" y1="9" x2="42" y2="9" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="37" y1="11" x2="42" y2="11" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="37" y1="13" x2="42" y2="13" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
+          {/* LED indicator */}
+          <circle data-led cx="27" cy="6" r="1.5" fill="#22C55E" opacity="0" />
+        </svg>
+      </div>
+    </>
+  );
+}

@@ -14,7 +14,7 @@ import { ContactPage } from '@/pages/ContactPage';
 import { ArticlesPage } from '@/pages/ArticlesPage';
 import { ArticleDetailPage } from '@/pages/ArticleDetailPage';
 import { ScrollProgress } from '@/components/ScrollProgress';
-import { CursorGlow } from '@/components/CursorGlow';
+import { NetworkCursor } from '@/components/NetworkCursor';
 import { EASE } from '@/lib/motion';
 
 function renderRoute(route: string, navigate: (to: string) => void) {
@@ -38,7 +38,7 @@ function App() {
   return (
     <div className="flex min-h-screen flex-col bg-cream">
       <ScrollProgress />
-      <CursorGlow />
+      <NetworkCursor />
       <Header route={route} navigate={navigate} />
       <main className="flex-1 pb-16 lg:pb-0">
         <AnimatePresence mode="wait">
