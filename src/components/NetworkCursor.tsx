@@ -22,21 +22,22 @@ type Vec = { x: number; y: number };
 export function NetworkCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const svgRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(false);
+  const [active] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return !window.matchMedia('(pointer: coarse)').matches;
+  });
 
   useEffect(() => {
     if (!active || typeof window === 'undefined') return;
 
-    // ── Fallbacks ──────────────────────────────────────────────────
-    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
-    if (isCoarse) return;
-    setActive(true);
-
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.body.classList.add('network-cursor-active');
 
     // ── Canvas setup ──────────────────────────────────────────────────
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext('2d')!;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
     let dpr = window.devicePixelRatio || 1;
 
     function resize() {
