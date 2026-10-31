@@ -2,11 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 
 // ── Tunable constants ──────────────────────────────────────────────
 const SEGMENT_COUNT = 26;
-const SEGMENT_LENGTH = 10;
-const CABLE_ANCHOR_DISTANCE = 18;
-const STIFFNESS = 0.22;
-const DAMPING = 0.72;
-const IDLE_SWAY = 0.4;
+const SEGMENT_LENGTH = 8;
+const CABLE_ANCHOR_DISTANCE = 20;
+const DAMPING = 0.612;
+const IDLE_SWAY = 0.34;
 const CABLE_COLOR = '#1F3D36';
 const HIGHLIGHT_COLOR = '#C8A15A';
 const CABLE_WIDTH = 3;
@@ -152,22 +151,21 @@ export function NetworkCursor() {
 
     function updateChain() {
       // Head follows mouse
-      chain[0].px = chain[0].x;
-      chain[0].py = chain[0].y;
-      const anchorX = mouseX - Math.cos(mouseAngle) * CABLE_ANCHOR_DISTANCE;
-      const anchorY = mouseY - Math.sin(mouseAngle) * CABLE_ANCHOR_DISTANCE;
-      chain[0].x += (anchorX - chain[0].x) * STIFFNESS;
-      chain[0].y += (anchorY - chain[0].y) * STIFFNESS;
+      const anchorX = mouseX - Math.cos(mouseAngle) * CABLE_ANCHOR_DISTANCE * plugScale;
+      const anchorY = mouseY - Math.sin(mouseAngle) * CABLE_ANCHOR_DISTANCE * plugScale;
+      chain[0].x = anchorX;
+      chain[0].y = anchorY;
+      chain[0].px = anchorX;
+      chain[0].py = anchorY;
 
       // Verlet constraints for rest of chain
       for (let i = 1; i < chain.length; i++) {
         const p = chain[i];
-        p.px = p.x;
-        p.py = p.y;
-
         // Inertia (verlet integration)
         const vx = (p.x - p.px) * DAMPING;
         const vy = (p.y - p.py) * DAMPING;
+        p.px = p.x;
+        p.py = p.y;
         p.x += vx;
         p.y += vy;
 
@@ -185,10 +183,8 @@ export function NetworkCursor() {
         const dy = p.y - prev.y;
         const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
         const diff = (dist - SEGMENT_LENGTH) / dist;
-        p.x -= dx * diff * 0.5;
-        p.y -= dy * diff * 0.5;
-        prev.x += dx * diff * 0.5;
-        prev.y += dy * diff * 0.5;
+        p.x -= dx * diff;
+        p.y -= dy * diff;
       }
 
       // Multiple passes for stability
@@ -200,12 +196,16 @@ export function NetworkCursor() {
           const dy = p.y - prev.y;
           const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
           const diff = (dist - SEGMENT_LENGTH) / dist;
-          p.x -= dx * diff * 0.5;
-          p.y -= dy * diff * 0.5;
-          prev.x += dx * diff * 0.5;
-          prev.y += dy * diff * 0.5;
+          p.x -= dx * diff;
+          p.y -= dy * diff;
         }
       }
+
+      // Re-pin cable head to the plug boot rear
+      chain[0].x = anchorX;
+      chain[0].y = anchorY;
+      chain[0].px = anchorX;
+      chain[0].py = anchorY;
     }
 
     function drawCable() {
@@ -364,10 +364,10 @@ export function NetworkCursor() {
         style={{ opacity: 0, willChange: 'transform, opacity' }}
         aria-hidden="true"
       >
-        <svg width="44" height="20" viewBox="0 0 44 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="44" height="26" viewBox="0 0 44 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Cable-side strain relief */}
           <path
-            d="M5 4 H10 V16 H5 Z"
+            d="M2 8 L12 6 V20 L2 18 Z"
             fill="#1F3D36"
             fillOpacity="0.12"
             stroke="#1F3D36"
@@ -376,7 +376,7 @@ export function NetworkCursor() {
           />
           {/* Translucent clip tab */}
           <path
-            d="M12 2 H31 V8 H25 L22 5 H12 Z"
+            d="M13 6 L21 2 H31 L34 10 H27 L24 7 H13 Z"
             fill="#1F3D36"
             fillOpacity="0.12"
             stroke="#1F3D36"
@@ -385,19 +385,19 @@ export function NetworkCursor() {
           />
           {/* Plug body */}
           <path
-            d="M8 3 H37 L42 7 V13 L37 17 H8 Z"
+            d="M12 4 H37 L42 8 V18 L37 22 H12 Z"
             fill="#E7E3DA"
             stroke="#1F3D36"
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
           {/* Gold contact pins at the pointer-facing tip */}
-          <line x1="37" y1="7" x2="42" y2="7" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
-          <line x1="37" y1="9" x2="42" y2="9" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="37" y1="8" x2="42" y2="8" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
           <line x1="37" y1="11" x2="42" y2="11" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
-          <line x1="37" y1="13" x2="42" y2="13" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="37" y1="14" x2="42" y2="14" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="37" y1="17" x2="42" y2="17" stroke="#C8A15A" strokeWidth="1.5" strokeLinecap="round" />
           {/* LED indicator */}
-          <circle data-led cx="27" cy="6" r="1.5" fill="#22C55E" opacity="0" />
+          <circle data-led cx="30" cy="7" r="1.5" fill="#22C55E" opacity="0" />
         </svg>
       </div>
     </>
