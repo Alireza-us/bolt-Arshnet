@@ -358,6 +358,7 @@ export const fa: Translations = {
     notFoundCode: '۴۰۴',
     notFoundText: 'مقاله پیدا نشد.',
     articleFallbackTitle: 'مقاله',
+    noResults: 'هنوز مقاله‌ای در این دسته‌بندی وجود ندارد.',
   },
   projectPlanner: {
     eyebrow: 'برنامه‌ریز پروژه',

@@ -357,6 +357,7 @@ export const en = {
     notFoundCode: '404',
     notFoundText: 'Article not found.',
     articleFallbackTitle: 'Article',
+    noResults: 'No articles in this category yet.',
   },
   projectPlanner: {
     eyebrow: 'Project Planner',

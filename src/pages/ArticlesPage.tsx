@@ -73,6 +73,15 @@ export function ArticlesPage({ navigate }: { navigate: (to: Route) => void }) {
             ))}
           </motion.div>
 
+          {filtered.length === 0 ? (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="py-16 text-center text-lg text-ink-500"
+            >
+              {a.noResults}
+            </motion.p>
+          ) : (
           <motion.div
             key={active}
             variants={staggerContainer(0.08)}
@@ -111,6 +120,7 @@ export function ArticlesPage({ navigate }: { navigate: (to: Route) => void }) {
               </motion.button>
             ))}
           </motion.div>
+          )}
         </div>
       </section>
     </>

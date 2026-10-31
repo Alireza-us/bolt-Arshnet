@@ -21,8 +21,8 @@ type Status = 'idle' | 'loading' | 'success' | 'error';
 type FormErrors = Partial<Record<'name' | 'phone' | 'email' | 'message', string>>;
 const viewportOnce = { once: true, margin: '-60px' as const };
 
-export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => void }) {
-  const { t } = useI18n();
+export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
+  const { t, dir } = useI18n();
   const c = t.contact;
   const reduced = useReducedMotion();
 
@@ -211,7 +211,7 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
             >
               <motion.a
                 variants={staggerItem()}
-                whileHover={reduced ? undefined : { x: 4 }}
+                whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 href={`tel:${t.common.phoneDial}`}
                 className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
@@ -227,7 +227,7 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
 
               <motion.a
                 variants={staggerItem()}
-                whileHover={reduced ? undefined : { x: 4 }}
+                whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 href="https://wa.me/[PHONE-DIGITS-NO-PLUS]" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
@@ -243,7 +243,7 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
 
               <motion.a
                 variants={staggerItem()}
-                whileHover={reduced ? undefined : { x: 4 }}
+                whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 href="https://t.me/[TELEGRAM-USERNAME]" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
@@ -259,7 +259,7 @@ export function ContactPage({ navigate: _navigate }: { navigate: (to: Route) => 
 
               <motion.a
                 variants={staggerItem()}
-                whileHover={reduced ? undefined : { x: 4 }}
+                whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 href={`mailto:${t.common.contactEmail}`}
                 className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"

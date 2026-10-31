@@ -130,7 +130,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
               const Icon = meta.icon;
               return (
                 <motion.button
-                  key={i}
+                  key={meta.to}
                   variants={staggerItem()}
                   onClick={() => navigate(meta.to)}
                   whileHover={reduced ? undefined : { y: -6 }}
@@ -177,7 +177,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
               const StepIcon = STEP_ICONS[i] ?? Phone;
               return (
                 <motion.div
-                  key={i}
+                  key={step.title}
                   variants={staggerItem()}
                   whileHover={reduced ? undefined : { y: -4 }}
                   transition={{ duration: 0.4, ease: EASE }}
@@ -247,7 +247,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
           >
             {h.testimonials.map((tm, i) => (
               <motion.figure
-                key={i}
+                key={tm.name + i}
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -4 }}
                 transition={{ duration: 0.4, ease: EASE }}

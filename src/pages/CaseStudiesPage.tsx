@@ -46,7 +46,7 @@ export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void })
           >
             {cs.studies.map((s, i) => (
               <motion.article
-                key={i}
+                key={s.title}
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -6 }}
                 transition={{ duration: 0.4, ease: EASE }}

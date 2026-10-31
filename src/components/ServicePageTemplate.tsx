@@ -36,7 +36,7 @@ export function ServicePageTemplate({
   serviceKey: ServiceKey;
   navigate: (to: Route) => void;
 }) {
-  const { t, dir } = useI18n();
+  const { t, dir, digits } = useI18n();
   const d = t[serviceKey];
   const faqs: FaqItem[] = d.faqs;
   const Icon = ICONS[serviceKey];
@@ -167,7 +167,7 @@ export function ServicePageTemplate({
           >
             {d.included.map((item, i) => (
               <motion.div
-                key={i}
+                key={item}
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -3 }}
                 transition={{ duration: 0.4, ease: EASE }}
@@ -208,14 +208,14 @@ export function ServicePageTemplate({
           >
             {d.process.map((step, i) => (
               <motion.div
-                key={i}
+                key={step.title}
                 variants={staggerItem()}
-                whileHover={reduced ? undefined : { x: 4 }}
+                whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 className="flex gap-4 rounded-xl border border-hairline bg-cream-50 p-5 shadow-card"
               >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald text-sm font-700 text-cream-50">
-                  {i + 1}
+                  {digits(String(i + 1))}
                 </div>
                 <div>
                   <h3 className="text-lg font-600 text-ink">{step.title}</h3>
