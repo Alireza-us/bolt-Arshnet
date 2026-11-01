@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
 import type { Route } from '@/lib/router';
 import { useI18n } from '@/lib/i18n/index.tsx';
+import { GlowText } from '@/components/GlowText';
 
 export function Footer({ navigate }: { navigate: (to: Route) => void }) {
   const { t } = useI18n();
@@ -36,12 +37,13 @@ export function Footer({ navigate }: { navigate: (to: Route) => void }) {
             <ul className="mt-4 grid grid-cols-2 gap-2">
               {links.map((l) => (
                 <li key={l.to}>
-                  <button
+                  <GlowText
                     onClick={() => navigate(l.to)}
-                    className="text-sm text-ink-500 transition-colors hover:text-emerald"
+                    className="relative inline-block text-sm text-ink-500 transition-colors hover:text-emerald"
                   >
+                    <span className="led-dot absolute -start-3 top-1/2 -translate-y-1/2" />
                     {l.label}
-                  </button>
+                  </GlowText>
                 </li>
               ))}
             </ul>
@@ -55,8 +57,15 @@ export function Footer({ navigate }: { navigate: (to: Route) => void }) {
               <li>
                 <a
                   href={`tel:${t.common.phoneDial}`}
-                  className="flex items-center gap-2 hover:text-emerald"
+                  onMouseMove={(e) => {
+                    const el = e.currentTarget;
+                    const rect = el.getBoundingClientRect();
+                    el.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+                    el.style.setProperty('--my', `${e.clientY - rect.top}px`);
+                  }}
+                  className="spotlight relative flex items-center gap-2 hover:text-emerald"
                 >
+                  <span className="led-dot absolute -start-3 top-1/2 -translate-y-1/2" />
                   <Phone className="h-4 w-4 text-emerald" />
                   {t.common.phoneNumber}
                 </a>
@@ -64,8 +73,15 @@ export function Footer({ navigate }: { navigate: (to: Route) => void }) {
               <li>
                 <a
                   href={`mailto:${t.common.contactEmail}`}
-                  className="flex items-center gap-2 hover:text-emerald"
+                  onMouseMove={(e) => {
+                    const el = e.currentTarget;
+                    const rect = el.getBoundingClientRect();
+                    el.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+                    el.style.setProperty('--my', `${e.clientY - rect.top}px`);
+                  }}
+                  className="spotlight relative flex items-center gap-2 hover:text-emerald"
                 >
+                  <span className="led-dot absolute -start-3 top-1/2 -translate-y-1/2" />
                   <Mail className="h-4 w-4 text-emerald" />
                   {t.common.contactEmail}
                 </a>

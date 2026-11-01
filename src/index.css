@@ -11,6 +11,7 @@
   --champagne: #C8A15A;
   --hairline: #E7E3DA;
   --accent: #1F3D36;
+  --glow-blue: rgba(110, 168, 255, 0.35);
 }
 
 html {
@@ -121,4 +122,89 @@ select:focus-visible {
 /* Disable letter-spacing in RTL — breaks Persian connected script */
 html[dir='rtl'] * {
   letter-spacing: normal !important;
+}
+
+/* ── Network motion effects ───────────────────────────────────────── */
+
+/* Hover spotlight: blue glow follows mouse inside element */
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(80px circle at var(--mx, 50%) var(--my, 50%), var(--glow-blue), transparent 70%);
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+@media (pointer: coarse) {
+  .spotlight::before { opacity: 0 !important; }
+}
+
+/* Status LED dot — network port light */
+.led-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22C55E;
+  box-shadow: 0 0 4px rgba(34, 197, 94, 0.6), 0 0 2px var(--glow-blue);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.group:hover .led-dot,
+.spotlight:hover .led-dot {
+  opacity: 1;
+  animation: led-blink 1.2s ease-in-out infinite;
+}
+@keyframes led-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@media (pointer: coarse) {
+  .led-dot { opacity: 0 !important; animation: none !important; }
+}
+
+/* Card border signal highlight */
+.card-highlight {
+  position: relative;
+  overflow: hidden;
+}
+.card-highlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    var(--card-highlight-dir, 90deg),
+    transparent 30%,
+    var(--glow-blue) 50%,
+    transparent 70%
+  );
+  background-size: 250% 100%;
+  background-position: 150% 0;
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  mix-blend-mode: screen;
+}
+.card-highlight:hover::after {
+  opacity: 0.7;
+  animation: card-sweep 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes card-sweep {
+  from { background-position: 150% 0; }
+  to { background-position: -150% 0; }
+}
+@media (pointer: coarse) {
+  .card-highlight::after { opacity: 0 !important; animation: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-highlight::after { opacity: 0 !important; animation: none !important; }
+  .spotlight::before { opacity: 0 !important; }
+  .led-dot { animation: none !important; }
 }

@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from '@/lib/router';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -15,7 +14,7 @@ import { ArticlesPage } from '@/pages/ArticlesPage';
 import { ArticleDetailPage } from '@/pages/ArticleDetailPage';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { NetworkCursor } from '@/components/NetworkCursor';
-import { EASE } from '@/lib/motion';
+import { PageTransition } from '@/components/PageTransition';
 
 function renderRoute(route: string, navigate: (to: string) => void) {
   if (route === '/') return <HomePage navigate={navigate} />;
@@ -41,17 +40,9 @@ function App() {
       <NetworkCursor />
       <Header route={route} navigate={navigate} />
       <main className="flex-1 pb-16 lg:pb-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={route}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3, ease: EASE }}
-          >
-            {renderRoute(route, navigate)}
-          </motion.div>
-        </AnimatePresence>
+        <PageTransition routeKey={route}>
+          {renderRoute(route, navigate)}
+        </PageTransition>
       </main>
       <Footer navigate={navigate} />
       <MobileCallBar />

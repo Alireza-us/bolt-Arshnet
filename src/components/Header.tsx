@@ -51,11 +51,18 @@ export function Header({
             <motion.button
               key={l.to}
               onClick={() => go(l.to)}
-              className="group relative rounded-lg px-3.5 py-2 text-sm font-500 transition-colors"
+              onMouseMove={(e) => {
+                const el = e.currentTarget;
+                const rect = el.getBoundingClientRect();
+                el.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+                el.style.setProperty('--my', `${e.clientY - rect.top}px`);
+              }}
+              className="group spotlight relative rounded-lg px-3.5 py-2 text-sm font-500 transition-colors"
               initial={reduced ? undefined : { opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: EASE, delay: 0.05 * i }}
             >
+              <span className="led-dot absolute start-2 top-1/2 -translate-y-1/2" />
               <span
                 className={
                   route === l.to
