@@ -13,10 +13,12 @@ export const fadeIn: Variants = {
   visible: { opacity: 1 },
 };
 
-export const staggerItem: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
-};
+export function staggerItem(): Variants {
+  return {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+  };
+}
 
 export function useViewportOnce() {
   const reduced = useReducedMotion();
