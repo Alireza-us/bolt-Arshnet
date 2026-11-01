@@ -21,6 +21,8 @@ import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
 import { SectionHeading } from '@/components/SectionHeading';
 import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
+import { CableDivider } from '@/components/CableDivider';
+import { NetworkBackground } from '@/components/NetworkBackground';
 
 const TRUST_BRANDS = ['Hikvision', 'Ubiquiti', 'MikroTik', '3CX', 'FreePBX', 'Grandstream'];
 
@@ -62,6 +64,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
       {/* HERO */}
       <section className="relative overflow-hidden bg-cream">
         <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
+        <NetworkBackground />
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
           ref={heroRef}
@@ -110,6 +113,8 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
         </div>
       </section>
 
+      <CableDivider />
+
       {/* SERVICE CARDS */}
       <section className="bg-cream py-16 sm:py-20">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
@@ -157,6 +162,8 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
         </div>
       </section>
 
+      <CableDivider flip />
+
       {/* HOW IT WORKS */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
         <div className="bg-circuit absolute inset-0 opacity-40" aria-hidden="true" />
@@ -198,6 +205,8 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
         </div>
       </section>
 
+      <CableDivider />
+
       {/* TRUST STRIP */}
       <section className="border-y border-hairline bg-cream py-12">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
@@ -230,6 +239,8 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
           </motion.div>
         </div>
       </section>
+
+      <CableDivider flip />
 
       {/* TESTIMONIALS */}
       <section className="bg-cream py-16 sm:py-20">
@@ -270,6 +281,8 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
           </motion.div>
         </div>
       </section>
+
+      <CableDivider />
 
       {/* FINAL CTA */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-24">

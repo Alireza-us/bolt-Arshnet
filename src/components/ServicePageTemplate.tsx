@@ -11,6 +11,7 @@ import { useSeo } from '@/lib/seo';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
 import { Faq, type FaqItem } from '@/components/Faq';
+import { CableDivider } from '@/components/CableDivider';
 import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
 
 export type ServiceKey = 'cameras' | 'voip' | 'network';
@@ -91,6 +92,8 @@ export function ServicePageTemplate({
         </div>
       </section>
 
+      <CableDivider />
+
       {/* PROBLEM */}
       <section className="bg-cream py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -123,6 +126,8 @@ export function ServicePageTemplate({
         </div>
       </section>
 
+      <CableDivider flip />
+
       {/* SOLUTION */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
         <div className="bg-circuit absolute inset-0 opacity-40" aria-hidden="true" />
@@ -144,6 +149,8 @@ export function ServicePageTemplate({
           </motion.div>
         </div>
       </section>
+
+      <CableDivider />
 
       {/* WHAT'S INCLUDED */}
       <section className="bg-cream py-16 sm:py-20">
@@ -185,6 +192,8 @@ export function ServicePageTemplate({
           </motion.div>
         </div>
       </section>
+
+      <CableDivider flip />
 
       {/* PROCESS */}
       <section className="bg-surface py-16 sm:py-20">
@@ -229,6 +238,8 @@ export function ServicePageTemplate({
         </div>
       </section>
 
+      <CableDivider />
+
       {/* FAQ */}
       <section className="bg-cream py-16 sm:py-20">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
@@ -259,6 +270,8 @@ export function ServicePageTemplate({
           </motion.div>
         </div>
       </section>
+
+      <CableDivider flip />
 
       {/* CTA */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
