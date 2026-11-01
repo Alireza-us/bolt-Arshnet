@@ -126,6 +126,27 @@ html[dir='rtl'] * {
 
 /* ── Network motion effects ───────────────────────────────────────── */
 
+/* Click glow — GlowText */
+.glow-text-active {
+  filter: brightness(1.15);
+}
+.glow-pop {
+  animation: glow-pop 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes glow-pop {
+  0% { opacity: 0.7; transform: scale(0.4); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glow-pop {
+    animation: glow-pop-reduced 700ms ease-out forwards;
+  }
+  @keyframes glow-pop-reduced {
+    0% { opacity: 0.5; transform: none; }
+    100% { opacity: 0; transform: none; }
+  }
+}
+
 /* Hover spotlight: blue glow follows mouse inside element */
 .spotlight::before {
   content: '';

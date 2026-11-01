@@ -29,8 +29,10 @@ export function GlowText({
       const y = e.clientY - rect.top;
       const id = idRef.current++;
       setGlows((g) => [...g, { id, x, y }]);
+      el.classList.add('glow-text-active');
       window.setTimeout(() => {
         setGlows((g) => g.filter((gl) => gl.id !== id));
+        el.classList.remove('glow-text-active');
       }, GLOW_DURATION);
       onClick?.();
     },
@@ -54,18 +56,16 @@ export function GlowText({
       {glows.map((g) => (
         <span
           key={g.id}
-          className="pointer-events-none absolute rounded-full"
+          className="pointer-events-none absolute rounded-full glow-pop"
           style={{
             left: g.x - GLOW_RADIUS,
             top: g.y - GLOW_RADIUS,
             width: GLOW_RADIUS * 2,
             height: GLOW_RADIUS * 2,
             background: 'radial-gradient(circle, var(--glow-blue), transparent 65%)',
-            animation: `glow-pop ${GLOW_DURATION}ms cubic-bezier(0.22,1,0.36,1) forwards`,
           }}
         />
       ))}
-      <style>{`@keyframes glow-pop { 0% { opacity: 0.7; transform: scale(0.4); } 100% { opacity: 0; transform: scale(1.6); } }`}</style>
     </Tag>
   );
 }
