@@ -83,7 +83,7 @@ export function ServicePageTemplate({
               <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
               <a
                 href={`tel:${t.common.phoneDial}`}
-                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-surface px-6 py-3.5 text-lg font-600 text-ink ring-1 ring-hairline transition-colors hover:bg-emerald/5"
+                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-surface px-6 py-3.5 text-lg font-600 text-ink ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
               >
                 <Phone className="h-5 w-5" /> {t.common.phoneNumber}
               </a>
@@ -138,7 +138,7 @@ export function ServicePageTemplate({
             whileInView="visible"
             viewport={viewportOnce}
             transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
-            className="rounded-2xl border border-hairline bg-cream-50 p-6 sm:p-10 shadow-soft"
+            className="card-highlight rounded-2xl border border-hairline bg-cream-50 p-6 sm:p-10 shadow-soft"
           >
             <h2 className="text-2xl font-700 text-ink sm:text-3xl">
               {d.solutionTitle}
@@ -178,7 +178,7 @@ export function ServicePageTemplate({
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -3 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                className="flex items-start gap-3 rounded-xl border border-hairline bg-surface p-4 shadow-card"
+                className="card-highlight flex items-start gap-3 rounded-xl border border-hairline bg-surface p-4 shadow-card"
               >
                 <div
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
@@ -221,7 +221,7 @@ export function ServicePageTemplate({
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                className="flex gap-4 rounded-xl border border-hairline bg-cream-50 p-5 shadow-card"
+                className="card-highlight flex gap-4 rounded-xl border border-hairline bg-cream-50 p-5 shadow-card"
               >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald text-sm font-700 text-cream-50">
                   {digits(String(i + 1))}
@@ -308,7 +308,7 @@ export function ServicePageTemplate({
             <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
             <button
               onClick={() => navigate('/pricing')}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-cream px-6 py-3.5 text-lg font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5"
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-cream px-6 py-3.5 text-lg font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
             >
               {t.common.seePricing} <BackIcon className="h-4 w-4" />
             </button>

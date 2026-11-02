@@ -181,7 +181,7 @@ export function ArticleDetailPage({
                   whileHover={reduced ? undefined : { y: -4 }}
                   transition={{ duration: 0.4, ease: EASE }}
                   onClick={() => navigate(`/articles/${rel.slug}`)}
-                  className="group flex flex-col rounded-2xl border border-hairline bg-cream-50 p-6 text-start shadow-card hover:border-emerald/30"
+                  className="group card-highlight flex flex-col rounded-2xl border border-hairline bg-cream-50 p-6 text-start shadow-card hover:border-emerald/30"
                 >
                   <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">
                     <Tag className="h-3 w-3" />
@@ -234,7 +234,7 @@ export function ArticleDetailPage({
             <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
             <button
               onClick={() => navigate('/contact')}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-cream px-6 py-3.5 text-lg font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5"
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-cream px-6 py-3.5 text-lg font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
             >
               {t.nav.contact}
               <BackIcon className="h-4 w-4" />

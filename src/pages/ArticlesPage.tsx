@@ -96,7 +96,7 @@ export function ArticlesPage({ navigate }: { navigate: (to: Route) => void }) {
                 whileHover={reduced ? undefined : { y: -6 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 onClick={() => navigate(`/articles/${art.slug}`)}
-                className="group flex flex-col rounded-2xl border border-hairline bg-surface p-6 text-start shadow-card hover:border-emerald/30"
+                className="group card-highlight flex flex-col rounded-2xl border border-hairline bg-surface p-6 text-start shadow-card hover:border-emerald/30"
               >
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">

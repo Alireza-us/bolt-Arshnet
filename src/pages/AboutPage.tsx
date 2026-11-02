@@ -30,7 +30,7 @@ export function AboutPage({ navigate }: { navigate: (to: Route) => void }) {
             className="grid items-center gap-10 lg:grid-cols-[1fr_1.3fr]"
           >
             <motion.div variants={staggerItem()} className="mx-auto w-full max-w-sm">
-              <div className="aspect-[4/5] w-full rounded-2xl border border-hairline bg-surface bg-circuit flex items-center justify-center shadow-card">
+              <div className="card-highlight aspect-[4/5] w-full rounded-2xl border border-hairline bg-surface bg-circuit flex items-center justify-center shadow-card">
                 <div className="text-center">
                   <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-emerald/8 text-4xl font-700 text-emerald">
                     {locale === 'fa' ? 'ع' : 'A'}
@@ -53,7 +53,7 @@ export function AboutPage({ navigate }: { navigate: (to: Route) => void }) {
                 <CtaButton navigate={navigate} />
                 <a
                   href={`tel:${t.common.phoneDial}`}
-                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-surface px-5 py-3 text-base font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5"
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-surface px-5 py-3 text-base font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
                 >
                   <Phone className="h-5 w-5" /> {t.common.phoneNumber}
                 </a>
@@ -108,7 +108,7 @@ export function AboutPage({ navigate }: { navigate: (to: Route) => void }) {
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -3 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                className="flex items-start gap-3 rounded-xl border border-hairline bg-surface p-5 shadow-card"
+                className="card-highlight flex items-start gap-3 rounded-xl border border-hairline bg-surface p-5 shadow-card"
               >
                 <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-emerald" />
                 <div>
@@ -156,7 +156,7 @@ export function AboutPage({ navigate }: { navigate: (to: Route) => void }) {
             <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
             <button
               onClick={() => navigate('/case-studies')}
-              className="ml-0 mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-cream px-5 py-3 text-base font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 sm:ml-3 sm:mt-0"
+              className="ml-0 mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-cream px-5 py-3 text-base font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden sm:ml-3 sm:mt-0"
             >
               {a.seeCaseStudies} <BackIcon className="h-4 w-4" />
             </button>

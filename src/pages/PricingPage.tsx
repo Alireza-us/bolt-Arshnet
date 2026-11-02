@@ -52,7 +52,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -6 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                className={`relative flex flex-col rounded-2xl border p-6 sm:p-7 ${
+                className={`card-highlight relative flex flex-col rounded-2xl border p-6 sm:p-7 ${
                   i === 1
                     ? 'border-emerald/40 bg-surface shadow-soft ring-1 ring-emerald/20'
                     : 'border-hairline bg-surface shadow-card'
@@ -100,7 +100,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
             whileInView="visible"
             viewport={viewportOnce}
             transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
-            className="mt-8 overflow-x-auto rounded-2xl border border-hairline bg-cream-50 shadow-card"
+            className="card-highlight mt-8 overflow-x-auto rounded-2xl border border-hairline bg-cream-50 shadow-card"
           >
             <table className="w-full text-start text-sm">
               <thead>
@@ -148,7 +148,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -3 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                className="rounded-2xl border border-hairline bg-surface p-5 shadow-card"
+                className="card-highlight rounded-2xl border border-hairline bg-surface p-5 shadow-card"
               >
                 <div className="text-sm text-ink-500">{proj.label}</div>
                 <div className="mt-2 text-xl font-700 text-emerald">{proj.from}</div>
@@ -166,7 +166,7 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
             <CtaButton navigate={navigate} />
             <button
               onClick={() => navigate('/contact')}
-              className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-surface px-5 py-3 text-base font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5"
+              className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-surface px-5 py-3 text-base font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
             >
               {p.askCustomJob} <BackIcon className="h-4 w-4" />
             </button>

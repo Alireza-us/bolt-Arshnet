@@ -50,7 +50,7 @@ export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void })
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -6 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                className="flex flex-col rounded-2xl border border-hairline bg-surface p-6 shadow-card"
+                className="card-highlight flex flex-col rounded-2xl border border-hairline bg-surface p-6 shadow-card"
               >
                 <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald/20 bg-emerald/8 px-3 py-1 text-xs font-600 text-emerald">
                   {s.type}
@@ -89,7 +89,7 @@ export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void })
             whileInView="visible"
             viewport={viewportOnce}
             transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
-            className="mt-12 rounded-2xl border border-hairline bg-surface p-8 text-center shadow-soft sm:p-10"
+            className="card-highlight mt-12 rounded-2xl border border-hairline bg-surface p-8 text-center shadow-soft sm:p-10"
           >
             <h2 className="text-2xl font-700 text-ink sm:text-3xl">{cs.wantSimilar}</h2>
             <p className="mx-auto mt-3 max-w-lg text-ink-500">{cs.wantSimilarDesc}</p>
@@ -97,7 +97,7 @@ export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void })
               <CtaButton navigate={navigate} />
               <button
                 onClick={() => navigate('/pricing')}
-                className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-cream px-5 py-3 text-base font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-cream px-5 py-3 text-base font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
               >
                 {t.common.seePricing} <BackIcon className="h-4 w-4" />
               </button>

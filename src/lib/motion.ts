@@ -15,8 +15,13 @@ export const fadeIn: Variants = {
 
 export function staggerItem(): Variants {
   return {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+    hidden: { opacity: 0, y: 20, scale: 0.96 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.5, ease: EASE },
+    },
   };
 }
 

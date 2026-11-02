@@ -134,7 +134,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
               whileInView="visible"
               viewport={viewportOnce}
               transition={{ duration: reduced ? 0 : 0.6, ease: EASE }}
-              className="rounded-2xl border border-hairline bg-surface p-6 shadow-soft sm:p-8"
+              className="card-highlight rounded-2xl border border-hairline bg-surface p-6 shadow-soft sm:p-8"
             >
               {status === 'success' ? (
                 <div className="flex flex-col items-center justify-center py-10 text-center">
@@ -143,7 +143,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
                   <p className="mt-2 max-w-sm text-ink-500">{c.successDesc}</p>
                   <button
                     onClick={() => setStatus('idle')}
-                    className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-cream px-5 py-3 text-sm font-600 text-emerald ring-1 ring-hairline hover:bg-emerald/5"
+                    className="mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-cream px-5 py-3 text-sm font-600 text-emerald ring-1 ring-hairline hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
                   >
                     {c.sendAnother}
                   </button>
@@ -189,7 +189,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
                     type="submit"
                     disabled={status === 'loading'}
                     whileTap={reduced ? undefined : { scale: 0.95 }}
-                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-emerald px-6 py-3.5 text-base font-600 text-cream-50 shadow-soft disabled:cursor-not-allowed disabled:opacity-70"
+                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-emerald px-6 py-3.5 text-base font-600 text-cream-50 shadow-soft disabled:cursor-not-allowed disabled:opacity-70 btn-shimmer relative overflow-hidden"
                   >
                     {status === 'loading' ? (
                       <><Loader2 className="h-5 w-5 animate-spin" /> {c.sending}</>
@@ -214,7 +214,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
                 whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 href={`tel:${t.common.phoneDial}`}
-                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30 card-highlight"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
                   <Phone className="h-6 w-6 text-emerald" />
@@ -230,7 +230,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
                 whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 href="https://wa.me/[PHONE-DIGITS-NO-PLUS]" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30 card-highlight"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
                   <MessageCircle className="h-6 w-6 text-emerald" />
@@ -246,7 +246,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
                 whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 href="https://t.me/[TELEGRAM-USERNAME]" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30 card-highlight"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
                   <Send className="h-6 w-6 text-emerald" />
@@ -262,7 +262,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
                 whileHover={reduced ? undefined : { x: dir === 'rtl' ? -4 : 4 }}
                 transition={{ duration: 0.4, ease: EASE }}
                 href={`mailto:${t.common.contactEmail}`}
-                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30"
+                className="flex items-center gap-4 rounded-2xl border border-hairline bg-surface p-5 shadow-card transition-colors hover:border-emerald/30 card-highlight"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald/8">
                   <Mail className="h-6 w-6 text-emerald" />
@@ -275,7 +275,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
 
               <motion.div
                 variants={staggerItem()}
-                className="rounded-2xl border border-hairline bg-surface p-5 shadow-card"
+                className="card-highlight rounded-2xl border border-hairline bg-surface p-5 shadow-card"
               >
                 <div className="flex items-center gap-2 text-ink-600">
                   <MapPin className="h-5 w-5 text-emerald" />

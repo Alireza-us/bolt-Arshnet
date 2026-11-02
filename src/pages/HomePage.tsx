@@ -92,7 +92,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
               <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
               <button
                 onClick={() => navigate('/pricing')}
-                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-surface px-6 py-3.5 text-lg font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5"
+                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-surface px-6 py-3.5 text-lg font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
               >
                 {t.common.seePricing}
                 <BackIcon className="h-4 w-4" />
@@ -140,7 +140,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
                   onClick={() => navigate(meta.to)}
                   whileHover={reduced ? undefined : { y: -6 }}
                   transition={{ duration: 0.4, ease: EASE }}
-                  className="group flex flex-col rounded-2xl border border-hairline bg-surface p-6 text-start shadow-card hover:border-emerald/30"
+                  className="group card-highlight flex flex-col rounded-2xl border border-hairline bg-surface p-6 text-start shadow-card hover:border-emerald/30"
                 >
                   <div
                     className="flex h-14 w-14 items-center justify-center rounded-xl"
@@ -188,7 +188,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
                   variants={staggerItem()}
                   whileHover={reduced ? undefined : { y: -4 }}
                   transition={{ duration: 0.4, ease: EASE }}
-                  className="relative rounded-2xl border border-hairline bg-cream-50 p-6 shadow-card"
+                  className="group card-highlight relative rounded-2xl border border-hairline bg-cream-50 p-6 shadow-card"
                 >
                   <div className="absolute -top-3 start-6 flex h-7 w-7 items-center justify-center rounded-full bg-emerald text-sm font-700 text-cream-50">
                     {digits(String(i + 1))}
@@ -262,7 +262,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
                 variants={staggerItem()}
                 whileHover={reduced ? undefined : { y: -4 }}
                 transition={{ duration: 0.4, ease: EASE }}
-                className="flex flex-col rounded-2xl border border-hairline bg-surface p-6 shadow-card"
+                className="group card-highlight flex flex-col rounded-2xl border border-hairline bg-surface p-6 shadow-card"
               >
                 <div className="flex gap-1 text-champagne-400" aria-hidden="true">
                   {Array.from({ length: 5 }).map((_, s) => (
@@ -320,7 +320,7 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
             <CtaButton navigate={navigate} className="px-6 py-3.5 text-lg" />
             <a
               href={`tel:${t.common.phoneDial}`}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-cream px-6 py-3.5 text-lg font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5"
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-cream px-6 py-3.5 text-lg font-600 text-emerald ring-1 ring-hairline transition-colors hover:bg-emerald/5 btn-shimmer relative overflow-hidden"
             >
               <Phone className="h-5 w-5" />
               {t.common.phoneNumber}
