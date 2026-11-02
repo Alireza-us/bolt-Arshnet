@@ -30,7 +30,8 @@ export function AboutPage({ navigate }: { navigate: (to: Route) => void }) {
             className="grid items-center gap-10 lg:grid-cols-[1fr_1.3fr]"
           >
             <motion.div variants={staggerItem()} className="mx-auto w-full max-w-sm">
-              <div className="card-highlight aspect-[4/5] w-full rounded-2xl border border-hairline bg-surface bg-circuit flex items-center justify-center shadow-card">
+              <div className="card-highlight aspect-[4/5] w-full rounded-2xl border border-hairline bg-surface flex items-center justify-center shadow-card relative overflow-hidden">
+                <TwinkleDots />
                 <div className="text-center">
                   <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-emerald/8 text-4xl font-700 text-emerald">
                     {locale === 'fa' ? 'ع' : 'A'}
