@@ -4,7 +4,12 @@ import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
-import { SectionDecor, pickVariant } from '@/components/SectionDecor';({ navigate }: { navigate: (to: Route) => void }) {
+import { SectionDecor, pickVariant } from '@/components/SectionDecor';
+import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
+
+const viewportOnce = { once: true, margin: '-60px' as const };
+
+export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void }) {
   const { t, dir } = useI18n();
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const cs = t.caseStudies;
