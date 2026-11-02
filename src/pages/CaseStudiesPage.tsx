@@ -4,11 +4,7 @@ import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
-import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
-
-const viewportOnce = { once: true, margin: '-60px' as const };
-
-export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void }) {
+import { SectionDecor, pickVariant } from '@/components/SectionDecor';({ navigate }: { navigate: (to: Route) => void }) {
   const { t, dir } = useI18n();
   const BackIcon = dir === 'rtl' ? ArrowLeft : ArrowRight;
   const cs = t.caseStudies;
@@ -20,6 +16,7 @@ export function CaseStudiesPage({ navigate }: { navigate: (to: Route) => void })
     <>
       <section className="relative overflow-hidden bg-cream pt-16 sm:pt-20">
         <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
+        <SectionDecor variant="ping" />
         <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
           <motion.div
             variants={staggerContainer(0.12, 0.1)}
