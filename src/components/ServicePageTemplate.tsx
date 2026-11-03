@@ -12,8 +12,6 @@ import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
 import { Faq, type FaqItem } from '@/components/Faq';
 import { CableDivider } from '@/components/CableDivider';
-import { SectionDecor, pickVariant } from '@/components/SectionDecor';
-import { TwinkleDots } from '@/components/TwinkleDots';
 import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
 
 export type ServiceKey = 'cameras' | 'voip' | 'network';
@@ -55,13 +53,6 @@ export function ServicePageTemplate({
     <>
       {/* HERO */}
       <section className="relative overflow-hidden bg-cream pt-14 sm:pt-16">
-        <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
-        <SectionDecor variant="packet" />
-        <div
-          className="absolute -top-20 left-1/2 h-56 w-[36rem] -translate-x-1/2 rounded-full blur-[120px]"
-          style={{ background: `${color}10` }}
-          aria-hidden="true"
-        />
         <div className="relative mx-auto max-w-8xl px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8">
           <motion.div
             variants={heroVariants}
@@ -99,7 +90,6 @@ export function ServicePageTemplate({
 
       {/* PROBLEM */}
       <section className="relative overflow-hidden bg-cream py-16 sm:py-20">
-        <SectionDecor variant={pickVariant(1)} />
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={fadeUp}
@@ -134,7 +124,6 @@ export function ServicePageTemplate({
 
       {/* SOLUTION */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
-        <TwinkleDots />
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={fadeUp}
@@ -158,7 +147,6 @@ export function ServicePageTemplate({
 
       {/* WHAT'S INCLUDED */}
       <section className="relative overflow-hidden bg-cream py-16 sm:py-20">
-        <SectionDecor variant={pickVariant(3)} />
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <motion.h2
             variants={fadeUp}
@@ -202,7 +190,6 @@ export function ServicePageTemplate({
 
       {/* PROCESS */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
-        <SectionDecor variant={pickVariant(4)} />
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <motion.h2
             variants={fadeUp}
@@ -248,7 +235,6 @@ export function ServicePageTemplate({
 
       {/* FAQ */}
       <section className="relative overflow-hidden bg-cream py-16 sm:py-20">
-        <SectionDecor variant={pickVariant(0)} />
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={fadeUp}
@@ -282,8 +268,6 @@ export function ServicePageTemplate({
 
       {/* CTA */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
-        <div className="bg-grid bg-grid-fade absolute inset-0 opacity-50" aria-hidden="true" />
-        <TwinkleDots />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <motion.h2
             variants={fadeUp}

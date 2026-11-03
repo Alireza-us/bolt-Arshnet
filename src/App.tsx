@@ -15,6 +15,7 @@ import { ArticleDetailPage } from '@/pages/ArticleDetailPage';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { NetworkCursor } from '@/components/NetworkCursor';
 import { PageTransition } from '@/components/PageTransition';
+import { InteractiveNetwork } from '@/components/InteractiveNetwork';
 
 function renderRoute(route: string, navigate: (to: string) => void) {
   if (route === '/') return <HomePage navigate={navigate} />;
@@ -35,10 +36,12 @@ function App() {
   const { route, navigate } = useRouter();
 
   return (
-    <div className="flex min-h-screen flex-col bg-cream">
+    <div className="relative flex min-h-screen flex-col bg-cream">
+      <InteractiveNetwork />
       <ScrollProgress />
       <NetworkCursor />
-      <Header route={route} navigate={navigate} />
+      <div className="relative z-10 flex min-h-screen flex-col">
+        <Header route={route} navigate={navigate} />
       <main className="flex-1 pb-16 lg:pb-0">
         <PageTransition routeKey={route}>
           {renderRoute(route, navigate)}
@@ -46,6 +49,7 @@ function App() {
       </main>
       <Footer navigate={navigate} />
       <MobileCallBar />
+      </div>
     </div>
   );
 }

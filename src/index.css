@@ -71,24 +71,6 @@ h1, h2, h3, h4 {
   color: #14141A;
 }
 
-/* Subtle grid background motif */
-.bg-grid {
-  background-image:
-    linear-gradient(to right, rgba(31, 61, 54, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(31, 61, 54, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-.bg-grid-fade {
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-}
-
-.bg-circuit {
-  background-image: radial-gradient(circle at 1px 1px, rgba(31, 61, 54, 0.10) 1px, transparent 0);
-  background-size: 28px 28px;
-}
-
 /* Custom network cursor is active only on precise-pointer devices */
 body.network-cursor-active {
   cursor: none;
