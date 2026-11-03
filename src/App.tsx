@@ -40,7 +40,7 @@ function App() {
       <InteractiveNetwork />
       <ScrollProgress />
       <NetworkCursor />
-      <div className="relative z-10 flex min-h-screen flex-col">
+      <div className="network-content relative z-10 flex min-h-screen flex-col">
         <Header route={route} navigate={navigate} />
       <main className="flex-1 pb-16 lg:pb-0">
         <PageTransition routeKey={route}>

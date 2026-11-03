@@ -22,7 +22,6 @@ body {
   @apply bg-cream text-ink font-sans antialiased;
 }
 
-/* Default font: Vazirmatn for Persian (RTL), Inter for English (LTR) */
 html[dir='rtl'] body {
   font-family: 'Vazirmatn', 'Inter', ui-sans-serif, system-ui, sans-serif;
   line-height: 1.8;
@@ -71,7 +70,6 @@ h1, h2, h3, h4 {
   color: #14141A;
 }
 
-/* Custom network cursor is active only on precise-pointer devices */
 body.network-cursor-active {
   cursor: none;
 }
@@ -81,7 +79,6 @@ body.network-cursor-active textarea {
   cursor: text;
 }
 
-/* Focus ring */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -92,44 +89,61 @@ select:focus-visible {
   border-radius: 4px;
 }
 
-/* Language cross-fade */
 .lang-fade {
   animation: lang-fade 0.3s ease-out;
 }
+
 @keyframes lang-fade {
   0% { opacity: 0.3; }
   100% { opacity: 1; }
 }
 
-/* Disable letter-spacing in RTL — breaks Persian connected script */
 html[dir='rtl'] * {
   letter-spacing: normal !important;
 }
 
-/* ── Network motion effects ───────────────────────────────────────── */
+.network-content section.bg-cream,
+.network-content section.bg-surface,
+.network-content article.bg-cream {
+  background-color: transparent !important;
+}
 
-/* Click glow — GlowText */
+.network-content .bg-surface {
+  background-color: rgba(255, 255, 255, 0.76) !important;
+}
+
+.network-content .bg-cream-50 {
+  background-color: rgba(250, 249, 245, 0.76) !important;
+}
+
+.network-content footer {
+  background-color: transparent !important;
+}
+
 .glow-text-active {
   filter: brightness(1.15);
 }
+
 .glow-pop {
   animation: glow-pop 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
 @keyframes glow-pop {
   0% { opacity: 0.7; transform: scale(0.4); }
   100% { opacity: 0; transform: scale(1.6); }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .glow-pop {
     animation: glow-pop-reduced 700ms ease-out forwards;
   }
+
   @keyframes glow-pop-reduced {
     0% { opacity: 0.5; transform: none; }
     100% { opacity: 0; transform: none; }
   }
 }
 
-/* Hover spotlight: blue glow follows mouse inside element */
 .spotlight::before {
   content: '';
   position: absolute;
@@ -140,14 +154,15 @@ html[dir='rtl'] * {
   background: radial-gradient(80px circle at var(--mx, 50%) var(--my, 50%), var(--glow-blue), transparent 70%);
   transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .spotlight:hover::before {
   opacity: 1;
 }
+
 @media (pointer: coarse) {
   .spotlight::before { opacity: 0 !important; }
 }
 
-/* Status LED dot — network port light */
 .led-dot {
   position: absolute;
   width: 5px;
@@ -159,24 +174,27 @@ html[dir='rtl'] * {
   transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
+
 .group:hover .led-dot,
 .spotlight:hover .led-dot {
   opacity: 1;
   animation: led-blink 1.2s ease-in-out infinite;
 }
+
 @keyframes led-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
 }
+
 @media (pointer: coarse) {
   .led-dot { opacity: 0 !important; animation: none !important; }
 }
 
-/* Card border signal highlight */
 .card-highlight {
   position: relative;
   overflow: hidden;
 }
+
 .card-highlight::after {
   content: '';
   position: absolute;
@@ -195,14 +213,17 @@ html[dir='rtl'] * {
   transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   mix-blend-mode: screen;
 }
+
 .card-highlight:hover::after {
   opacity: 0.7;
   animation: card-sweep 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
 @keyframes card-sweep {
   from { background-position: 150% 0; }
   to { background-position: -150% 0; }
 }
+
 html[dir='rtl'] .card-highlight::after {
   background: linear-gradient(
     270deg,
@@ -214,37 +235,44 @@ html[dir='rtl'] .card-highlight::after {
   background-position: -150% 0;
   animation: card-sweep-rtl 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
 @keyframes card-sweep-rtl {
   from { background-position: -150% 0; }
   to { background-position: 150% 0; }
 }
+
 @media (pointer: coarse) {
   .card-highlight::after { opacity: 0 !important; animation: none !important; }
 }
 
-/* Button shimmer + pulse */
 .btn-shimmer-sweep {
   transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .btn-shimmer:hover .btn-shimmer-sweep {
   opacity: 0.7 !important;
   animation: btn-shimmer 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
 html[dir='rtl'] .btn-shimmer:hover .btn-shimmer-sweep {
   animation: btn-shimmer-rtl 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
 @keyframes btn-shimmer {
   from { background-position: 150% 0; }
   to { background-position: -150% 0; }
 }
+
 @keyframes btn-shimmer-rtl {
   from { background-position: -150% 0; }
   to { background-position: 150% 0; }
 }
+
 @keyframes btn-pulse {
   0% { width: 0; height: 0; opacity: 0.6; }
   100% { width: 300px; height: 300px; margin: -150px 0 0 -150px; opacity: 0; }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .card-highlight::after { opacity: 0 !important; animation: none !important; }
   .btn-shimmer-sweep { opacity: 0 !important; animation: none !important; }
@@ -252,7 +280,6 @@ html[dir='rtl'] .btn-shimmer:hover .btn-shimmer-sweep {
   .led-dot { animation: none !important; }
 }
 
-/* Scroll reveal node-dot pop-in */
 .reveal-node-dot {
   display: inline-block;
   width: 4px;
