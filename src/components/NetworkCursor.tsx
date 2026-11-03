@@ -11,7 +11,7 @@ const CABLE_COLOR = '#1F3D36';
 const HIGHLIGHT_COLOR = '#C8A15A';
 const CABLE_WIDTH = 3;
 const PLUG_SCALE = 1;
-const HOVER_SCALE = 1.15;
+const HOVER_SCALE = 1;
 const CLICK_SCALE = 1.3;
 const LED_COLOR = '#22C55E';
 const PULSE_DURATION = 600;
@@ -78,7 +78,7 @@ export function NetworkCursor() {
     // ── Event handlers ──────────────────────────────────────────────
     function isInteractive(el: Element | null): boolean {
       if (!el) return false;
-      return !!el.closest('a, button, [role="button"], label, summary, .group');
+      return !!el.closest('a, button, [role="button"], summary, label[for], .cursor-pointer, [data-clickable]');
     }
 
     function isTextInput(el: Element | null): boolean {
@@ -91,7 +91,7 @@ export function NetworkCursor() {
       return tag === 'textarea';
     }
 
-    function onMouseMove(e: MouseEvent) {
+    function onPointerMove(e: PointerEvent) {
       prevMouseX = mouseX;
       prevMouseY = mouseY;
       mouseX = e.clientX;
@@ -141,7 +141,7 @@ export function NetworkCursor() {
       mouseInside = true;
     }
 
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
     window.addEventListener('mousedown', onMouseDown, { passive: true });
     window.addEventListener('mouseup', onMouseUp, { passive: true });
     document.addEventListener('mouseleave', onMouseLeave);
@@ -296,6 +296,12 @@ export function NetworkCursor() {
       svgRef.current.style.transformOrigin = '0 0';
       svgRef.current.style.transform = `translate(${mouseX}px, ${mouseY}px) rotate(${angleDeg}deg) scale(${plugScale}) translate(-50%, -50%)`;
       svgRef.current.style.opacity = String(opacity);
+      svgRef.current.style.filter = hovering
+        ? 'drop-shadow(0 0 3px rgba(110, 168, 255, 0.45)) drop-shadow(0 0 8px rgba(110, 168, 255, 0.25))'
+        : 'none';
+
+      const ringEl = svgRef.current.querySelector('[data-hover-ring]');
+      if (ringEl) ringEl.setAttribute('opacity', hovering ? '0.55' : '0');
 
       // Update LED
       const ledEl = svgRef.current.querySelector('[data-led]');
@@ -308,7 +314,7 @@ export function NetworkCursor() {
       if (!running) return;
 
       // Fade in/out
-      const targetOpacity = mouseInside && !overTextInput ? 1 : 0;
+      const targetOpacity = mouseInside && !overTextInput ? (hovering ? 0.4 : 1) : 0;
       opacity += (targetOpacity - opacity) * 0.1;
 
       // Smooth rotation using the shortest angular path
@@ -352,7 +358,7 @@ export function NetworkCursor() {
     return () => {
       running = false;
       cancelAnimationFrame(raf);
-      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mouseleave', onMouseLeave);
@@ -374,11 +380,12 @@ export function NetworkCursor() {
       />
       <div
         ref={svgRef}
-        className="pointer-events-none fixed left-0 top-0 z-[9999]"
-        style={{ opacity: 0, willChange: 'transform, opacity', transformOrigin: '0 0' }}
+        className="pointer-events-none fixed left-0 top-0 z-[9999] network-cursor-head"
+        style={{ opacity: 0, willChange: 'transform, opacity, filter', transformOrigin: '0 0', transition: 'filter 180ms ease' }}
         aria-hidden="true"
       >
         <svg width="44" height="26" viewBox="0 0 44 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="13" r="17" fill="none" stroke="rgba(110, 168, 255, 0.45)" strokeWidth="0.7" opacity="0" data-hover-ring style={{ transition: 'opacity 180ms ease' }} />
           {/* Cable-side strain relief */}
           <path
             d="M2 8 L12 6 V20 L2 18 Z"
