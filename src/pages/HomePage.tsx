@@ -22,7 +22,6 @@ import { CtaButton } from '@/components/CtaButton';
 import { SectionHeading } from '@/components/SectionHeading';
 import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
 import { CableDivider } from '@/components/CableDivider';
-import { SectionDecor, pickVariant } from '@/components/SectionDecor';
 
 const TRUST_BRANDS = ['Hikvision', 'Ubiquiti', 'MikroTik', '3CX', 'FreePBX', 'Grandstream'];
 
@@ -63,14 +62,6 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden bg-cream">
-        <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
-        <SectionDecor variant="packet" />
-        <motion.div
-          style={{ y: heroY, opacity: heroOpacity }}
-          ref={heroRef}
-          className="absolute -top-24 left-1/2 h-64 w-[40rem] -translate-x-1/2 rounded-full bg-emerald/8 blur-[120px]"
-          aria-hidden="true"
-        />
         <div className="relative mx-auto max-w-8xl px-4 pb-20 pt-16 sm:px-6 sm:pt-24 lg:px-8 lg:pb-28">
           <motion.div
             variants={heroVariants}
@@ -117,7 +108,6 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
 
       {/* SERVICE CARDS */}
       <section className="relative overflow-hidden bg-cream py-16 sm:py-20">
-        <SectionDecor variant={pickVariant(1)} />
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow={h.servicesEyebrow}
@@ -167,7 +157,6 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
 
       {/* HOW IT WORKS */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
-        <SectionDecor variant={pickVariant(2)} />
         <div className="relative mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow={h.howEyebrow}
@@ -210,7 +199,6 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
 
       {/* TRUST STRIP */}
       <section className="relative border-y border-hairline bg-cream py-12">
-        <SectionDecor variant={pickVariant(3)} />
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <motion.p
             variants={fadeUp}
@@ -246,7 +234,6 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
 
       {/* TESTIMONIALS */}
       <section className="relative overflow-hidden bg-cream py-16 sm:py-20">
-        <SectionDecor variant={pickVariant(4)} />
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow={h.testimonialsEyebrow}
@@ -289,9 +276,6 @@ export function HomePage({ navigate }: { navigate: (to: Route) => void }) {
 
       {/* FINAL CTA */}
       <section className="relative overflow-hidden bg-surface py-16 sm:py-24">
-        <div className="bg-grid bg-grid-fade absolute inset-0 opacity-50" aria-hidden="true" />
-        <SectionDecor variant={pickVariant(0)} />
-        <div className="absolute left-1/2 top-1/2 h-72 w-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald/6 blur-[120px]" aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <motion.h2
             variants={fadeUp}

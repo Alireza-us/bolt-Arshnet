@@ -15,7 +15,6 @@ import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { supabase } from '@/lib/supabase';
-import { SectionDecor, pickVariant } from '@/components/SectionDecor';
 import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
@@ -109,8 +108,6 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
   return (
     <>
       <section className="relative overflow-hidden bg-cream pt-14 sm:pt-16">
-        <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
-        <SectionDecor variant="orbit" />
         <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
           <motion.div
             variants={staggerContainer(0.12, 0.1)}

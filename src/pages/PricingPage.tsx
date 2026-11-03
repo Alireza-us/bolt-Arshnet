@@ -5,7 +5,6 @@ import { useSeo } from '@/lib/seo';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
 import { SectionHeading } from '@/components/SectionHeading';
-import { SectionDecor, pickVariant } from '@/components/SectionDecor';
 import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
 
 const viewportOnce = { once: true, margin: '-60px' as const };
@@ -21,8 +20,6 @@ export function PricingPage({ navigate }: { navigate: (to: Route) => void }) {
   return (
     <>
       <section className="relative overflow-hidden bg-cream pt-16 sm:pt-20">
-        <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
-        <SectionDecor variant="crosshair" />
         <div className="relative mx-auto max-w-8xl px-4 pb-8 sm:px-6 lg:px-8">
           <motion.div
             variants={staggerContainer(0.12, 0.1)}
