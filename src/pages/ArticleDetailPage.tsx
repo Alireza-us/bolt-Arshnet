@@ -4,7 +4,6 @@ import type { Route } from '@/lib/router';
 import { useSeo } from '@/lib/seo';
 import { useI18n } from '@/lib/i18n/index.tsx';
 import { CtaButton } from '@/components/CtaButton';
-import { SectionDecor, pickVariant } from '@/components/SectionDecor';
 import { getArticleBySlug, getRelatedArticles } from '@/lib/articles';
 import { EASE, fadeUp, staggerContainer, staggerItem } from '@/lib/motion';
 
@@ -65,8 +64,6 @@ export function ArticleDetailPage({
   return (
     <>
       <section className="relative overflow-hidden bg-cream pt-14 sm:pt-16">
-        <div className="bg-grid bg-grid-fade absolute inset-0" aria-hidden="true" />
-        <SectionDecor variant="packet" />
         <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={staggerContainer(0.1, 0.05)}
@@ -203,8 +200,6 @@ export function ArticleDetailPage({
       )}
 
       <section className="relative overflow-hidden bg-surface py-16 sm:py-20">
-        <div className="bg-grid bg-grid-fade absolute inset-0 opacity-50" aria-hidden="true" />
-        <SectionDecor variant={pickVariant(2)} />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <motion.h2
             variants={fadeUp}
