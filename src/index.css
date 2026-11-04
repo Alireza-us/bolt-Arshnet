@@ -70,13 +70,31 @@ h1, h2, h3, h4 {
   color: #14141A;
 }
 
-body.network-cursor-active {
-  cursor: none;
-}
-
-body.network-cursor-active input,
-body.network-cursor-active textarea {
-  cursor: text;
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor *,
+  html.has-custom-cursor *::before,
+  html.has-custom-cursor *::after,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor [role='button'],
+  html.has-custom-cursor summary,
+  html.has-custom-cursor label,
+  html.has-custom-cursor select,
+  html.has-custom-cursor option,
+  html.has-custom-cursor input,
+  html.has-custom-cursor textarea,
+  html.has-custom-cursor [contenteditable],
+  html.has-custom-cursor [draggable],
+  html.has-custom-cursor [tabindex],
+  html.has-custom-cursor .cursor-pointer,
+  html.has-custom-cursor .cursor-text,
+  html.has-custom-cursor .cursor-default,
+  html.has-custom-cursor .cursor-grab,
+  html.has-custom-cursor .cursor-move {
+    cursor: none !important;
+  }
 }
 
 a:focus-visible,

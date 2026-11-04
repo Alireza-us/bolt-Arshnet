@@ -188,7 +188,7 @@ export function ContactPage({ navigate }: { navigate: (to: Route) => void }) {
                     type="submit"
                     disabled={status === 'loading'}
                     whileTap={reduced ? undefined : { scale: 0.95 }}
-                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-emerald px-6 py-3.5 text-base font-600 text-cream-50 shadow-soft disabled:cursor-not-allowed disabled:opacity-70 btn-shimmer relative overflow-hidden"
+                    className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-emerald px-6 py-3.5 text-base font-600 text-cream-50 shadow-soft disabled:opacity-70 btn-shimmer relative overflow-hidden"
                   >
                     {status === 'loading' ? (
                       <><Loader2 className="h-5 w-5 animate-spin" /> {c.sending}</>

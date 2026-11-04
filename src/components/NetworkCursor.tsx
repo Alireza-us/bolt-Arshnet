@@ -24,20 +24,19 @@ export function NetworkCursor() {
   const svgRef = useRef<HTMLDivElement>(null);
   const [active] = useState(() => {
     if (typeof window === 'undefined') return false;
-    return !window.matchMedia('(pointer: coarse)').matches;
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   });
 
   useEffect(() => {
     if (!active || typeof window === 'undefined') return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document.body.classList.add('network-cursor-active');
-
     // ── Canvas setup ──────────────────────────────────────────────────
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    document.documentElement.classList.add('has-custom-cursor');
     let dpr = window.devicePixelRatio || 1;
 
     function resize() {
@@ -58,8 +57,7 @@ export function NetworkCursor() {
     let mouseAngle = 0;
     let targetMouseAngle = 0;
     let mouseSpeed = 0;
-    let mouseInside = true;
-    let overTextInput = false;
+    let mouseInside = false;
     let opacity = 0;
     let hovering = false;
     let clickPulse = 0;
@@ -78,17 +76,7 @@ export function NetworkCursor() {
     // ── Event handlers ──────────────────────────────────────────────
     function isInteractive(el: Element | null): boolean {
       if (!el) return false;
-      return !!el.closest('a, button, [role="button"], summary, label[for], .cursor-pointer, [data-clickable]');
-    }
-
-    function isTextInput(el: Element | null): boolean {
-      if (!el) return false;
-      const tag = el.tagName.toLowerCase();
-      if (tag === 'input') {
-        const type = (el as HTMLInputElement).type;
-        return ['text', 'email', 'tel', 'search', 'url', 'password', ''].includes(type);
-      }
-      return tag === 'textarea';
+      return !!el.closest('a, button, [role="button"], summary, label[for], select, [data-clickable], .cursor-pointer');
     }
 
     function onPointerMove(e: PointerEvent) {
@@ -96,6 +84,7 @@ export function NetworkCursor() {
       prevMouseY = mouseY;
       mouseX = e.clientX;
       mouseY = e.clientY;
+      if (!mouseInside) opacity = 1;
       mouseInside = true;
 
       const dx = mouseX - prevMouseX;
@@ -108,18 +97,12 @@ export function NetworkCursor() {
 
       const el = document.elementFromPoint(e.clientX, e.clientY);
       const wasHovering = hovering;
-      overTextInput = isTextInput(el);
-      hovering = isInteractive(el) && !overTextInput;
+      hovering = isInteractive(el);
 
       if (hovering !== wasHovering) {
         targetScale = hovering ? HOVER_SCALE : PLUG_SCALE;
       }
 
-      if (overTextInput) {
-        document.body.classList.remove('network-cursor-active');
-      } else {
-        document.body.classList.add('network-cursor-active');
-      }
     }
 
     function onMouseDown() {
@@ -134,11 +117,13 @@ export function NetworkCursor() {
 
     function onMouseLeave() {
       mouseInside = false;
-      document.body.classList.remove('network-cursor-active');
     }
 
-    function onMouseEnter() {
+    function onMouseEnter(e: MouseEvent) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
       mouseInside = true;
+      opacity = 1;
     }
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -314,7 +299,7 @@ export function NetworkCursor() {
       if (!running) return;
 
       // Fade in/out
-      const targetOpacity = mouseInside && !overTextInput ? (hovering ? 0.4 : 1) : 0;
+      const targetOpacity = mouseInside ? (hovering ? 0.4 : 1) : 0;
       opacity += (targetOpacity - opacity) * 0.1;
 
       // Smooth rotation using the shortest angular path
@@ -365,7 +350,7 @@ export function NetworkCursor() {
       document.removeEventListener('mouseenter', onMouseEnter);
       window.removeEventListener('resize', resize);
       document.removeEventListener('visibilitychange', onVisChange);
-      document.body.classList.remove('network-cursor-active');
+      document.documentElement.classList.remove('has-custom-cursor');
     };
   }, [active]);
 
@@ -375,12 +360,12 @@ export function NetworkCursor() {
     <>
       <canvas
         ref={canvasRef}
-        className="pointer-events-none fixed inset-0 z-[9998]"
+        className="pointer-events-none fixed inset-0 z-[2147483646]"
         aria-hidden="true"
       />
       <div
         ref={svgRef}
-        className="pointer-events-none fixed left-0 top-0 z-[9999] network-cursor-head"
+        className="pointer-events-none fixed left-0 top-0 z-[2147483647] network-cursor-head"
         style={{ opacity: 0, willChange: 'transform, opacity, filter', transformOrigin: '0 0', transition: 'filter 180ms ease' }}
         aria-hidden="true"
       >
